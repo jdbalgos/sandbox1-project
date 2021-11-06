@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="None">
+  
+  <link rel="canonical" href="http://docs.sandbox.io/">
+  <link rel="shortcut icon" href="img/favicon.ico">
+  <title>Deve Linux Sandbox Project</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Home";
+    var mkdocs_page_input_path = "index.md";
+    var mkdocs_page_url = "/";
+  </script>
+  
+  <script src="js/jquery-2.1.1.min.js" defer></script>
+  <script src="js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="." class="icon icon-home"> Deve Linux Sandbox Project</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href=".">Home</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#about-this-site">About this site</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#server-planning">Server planning</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#server-details">Server details</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#deployments">Deployments</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="gateway/">DNS and DHCP</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="spacewalk/">Spacewalk</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="freeipa/">FreeIPA</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="bot/">Automation</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="storage/">Storage</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="backup/">Backup</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="app/">Application</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="mail/">Mail</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="others/">Others</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href=".">Deve Linux Sandbox Project</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Home</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="deve-sandbox-project">Deve Sandbox Project</h1>
+<h2 id="about-this-site">About this site</h2>
+<p>I am creating my own infrastructure, all based on CentOS 7 Linux Servers.</p>
+<h2 id="server-planning">Server planning</h2>
+<h3 id="overview">Overview</h3>
+<ul>
+<li>I will use Proxmox virtual environment. Specs: i7, 16gb RAM, 1TB HDD</li>
+<li>DNS and DHCP server -&gt; Bind and DHCPd server for static ip and domain configuration.</li>
+<li>System Management -&gt; Spacewalk server, servers will also connect to this for PXE configuration</li>
+<li>Database Server -&gt; PostgreSQL Server, for Spacewalk database. <ul>
+<li>Export spacewalk server database</li>
+</ul>
+</li>
+<li>Directory Server -&gt; FreeIPA Server</li>
+<li>Automation Server -&gt; Puppet, Ansible<ul>
+<li>Puppet for general installation configuration, more like pre install.</li>
+<li>Ansible for node by node configuration/provisioning</li>
+</ul>
+</li>
+<li>Storage Server -&gt; NFS and LUN server. for backup of all servers</li>
+<li>Backup Server -&gt; Bacula server</li>
+</ul>
+<p>For now this are only the servers that is managed, will add servers accordingly.</p>
+<h3 id="server-details">Server details</h3>
+<table>
+<thead>
+<tr>
+<th>Hostname</th>
+<th>IP</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dns-dhcp.sandbox.io</td>
+<td>10.11.100.1</td>
+<td>DNS-DHCP server</td>
+</tr>
+<tr>
+<td>spacewalk.sandbox.io</td>
+<td>10.11.100.101</td>
+<td>Spacewalk server</td>
+</tr>
+<tr>
+<td>directory1.sandbox.io</td>
+<td>10.11.100.102</td>
+<td>IPA server</td>
+</tr>
+<tr>
+<td>docs.sandbox.io</td>
+<td>10.11.100.103</td>
+<td>Main documentation server</td>
+</tr>
+<tr>
+<td>sql.sandbox.io</td>
+<td>10.11.100.104</td>
+<td>PostgreSQL server</td>
+</tr>
+<tr>
+<td>bot.sandbox.io</td>
+<td>10.11.100.105</td>
+<td>Puppet, Ansible and Git Server</td>
+</tr>
+<tr>
+<td>storage.sandbox.io</td>
+<td>10.11.100.106</td>
+<td>LUN and NFS Server</td>
+</tr>
+<tr>
+<td>backup.sandbox.io</td>
+<td>10.11.100.107</td>
+<td>Bacula Server</td>
+</tr>
+<tr>
+<td>app1.sandbox.io</td>
+<td>10.11.100.108</td>
+<td>1st Tomcat Server</td>
+</tr>
+<tr>
+<td>app2.sandbox.io</td>
+<td>10.11.100.109</td>
+<td>2nd Tomcat Server</td>
+</tr>
+<tr>
+<td>ldb.sandbox.io</td>
+<td>10.11.100.110</td>
+<td>Load Balancer(HAProxy) Server</td>
+</tr>
+<tr>
+<td>TBD</td>
+<td>TBD</td>
+<td>TBD</td>
+</tr>
+</tbody>
+</table>
+<h3 id="deployments">Deployments</h3>
+<p>Since i am only using 16gb of RAM, I will introduce containers in the environment. Applications will be tested on KVM and LXC before moving to Main environment.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="gateway/" class="btn btn-neutral float-right" title="DNS and DHCP">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+      <span><a href="gateway/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '.';</script>
+    <script src="js/theme_extra.js" defer></script>
+    <script src="js/theme.js" defer></script>
+      <script src="search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 1.2.3
+Build Date UTC : 2021-11-06 18:26:58.202250+00:00
+-->

@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="canonical" href="http://docs.sandbox.io/backup/">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Backup - Deve Linux Sandbox Project</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Backup";
+    var mkdocs_page_input_path = "backup.md";
+    var mkdocs_page_url = "/backup/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Deve Linux Sandbox Project</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../gateway/">DNS and DHCP</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../spacewalk/">Spacewalk</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../freeipa/">FreeIPA</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../bot/">Automation</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../storage/">Storage</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Backup</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#dhcp-and-dns-entries">DHCP and DNS Entries</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#installation-and-setup">Installation and Setup</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#initial-setup">Initial Setup</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#mounting-the-shares">Mounting the shares</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#bacula-setup">Bacula Setup</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#bacula-director-configuration">Bacula Director Configuration</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#bacula-storage-daemon-configuration">Bacula Storage Daemon Configuration</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#bacula-file-daemonclient-configuration">Bacula File Daemon(Client) Configuration</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../app/">Application</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../mail/">Mail</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../others/">Others</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Deve Linux Sandbox Project</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Backup</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="backup">Backup</h1>
+<p>The Backup Server is a bacula server connected to the storage server</p>
+<h2 id="dhcp-and-dns-entries">DHCP and DNS Entries</h2>
+<p>Forward lookup zone</p>
+<pre><code>@           IN  NS  backup.sandbox.io.
+backup      IN  A   10.11.100.107
+</code></pre>
+<p>Reverse lookup zone</p>
+<pre><code>@           IN  NS  backup.sandbox.io.
+backup      IN  A   10.11.100.107
+107         IN  PTR backup.sandbox.io.
+</code></pre>
+<p>DHCP entry</p>
+<pre><code>host backup {
+    hardware ethernet 7A:B2:FA:F6:44:AB;
+    fixed-address 10.11.100.107;
+}
+</code></pre>
+<p>Process</p>
+<p>bconsole -&gt; bacula-dir(9101) -&gt; bacula-fd(9102) -&gt; bacula-sd(9103) -&gt; physical media
+bacula-dir -&gt; SQL DBMS(Catalogs)</p>
+<p>bacula-fd is the important to open the port in client if you will install all functions in one server</p>
+<h2 id="installation-and-setup">Installation and Setup</h2>
+<h3 id="initial-setup">Initial Setup</h3>
+<p>Install necessary applications</p>
+<pre><code>- name: install targetcli and iscsi-initiator-utils
+  yum:
+    name:
+    - iscsi-initiator-utils
+    - bacula-director
+    - bacula-storage
+    - bacula-console
+    - bacula-client
+    - postgresql
+    - postgresql-server
+    state: present
+</code></pre>
+<p>Open ports for bacula-dir(9101) and bacula-sd(9103)</p>
+<pre><code>- name: open ports on firewalld
+  firewalld:
+    port: '{{item}}'
+    immediate: true
+    permanent: true
+    state: enabled
+  with_items:
+    - '9101/tcp'
+    - '9103/tcp'
+</code></pre>
+<p>Setup iscsi initiator to connect to LUN storage</p>
+<pre><code>- name: insert IQN in initiatorname.iscsi
+  copy:
+    dest: /etc/iscsi/initiatorname.iscsi
+    content: 'InitiatorName=iqn.2021-09.io.sandbox.storage:backup-acl'
+- name: iscsid service start
+  service:
+    name: iscsid
+    state: started
+    enabled: true
+- name: discover the LUN share
+  open_iscsi:
+    show_nodes: true
+    portal: 'storage.sandbox.io'
+    discover: true
+- name: login to LUN share
+  open_iscsi:
+    login: true
+    target: 'iqn.2021-09.io.sandbox.storage'
+</code></pre>
+<h3 id="mounting-the-shares">Mounting the shares</h3>
+<p>Add directory where the NFS and LUN storage will mount to and add context</p>
+<pre><code>- name: create directory for bacula configuration
+  file:
+    path: '{{item}}'
+    state: directory
+    owner: bacula
+    group: bacula
+  with_items:
+    - '/bacula'
+    - '/bacula/LUN'
+    - '/bacula/NFS'
+    - '/etc/bacula/conf.d'
+- name: add fcontext to bacula directory for backup to run
+  sefcontext:
+    target: '/bacula(/.*)?'
+    setype: bacula_store_t
+    state: present
+- name: set use_nfs_home_dirs to true
+  seboolean:
+    name: use_nfs_home_dirs
+    state: true
+    persistent: true
+- name: restorecon the bacula directory
+  shell:
+    cmd: restorecon -Rv /bacula
+</code></pre>
+<p>Create systemd files for mounting LUN and NFS </p>
+<pre><code>- name: moved storage systemd files to /etc/systemd/system directory
+  copy:
+    src: 'files/backup/systemd/{{item}}'
+    dest: /etc/systemd/system
+  with_items:
+    - 'bacula-LUN.mount'
+    - 'bacula-LUN.automount'
+    - 'bacula-NFS.automount'
+    - 'bacula-NFS.mount'
+  register: copy_files
+- name: systemd reload
+  systemd:
+    daemon_reload: true
+  when: copy_files.changed == true
+</code></pre>
+<p>Naming conventions of the systemd mount files should correlate where you want to mount the shared storage. For example we want to mount the NFS folder to /bacula/NFS, we need to create a systemd file that named bacula-NFS.mount</p>
+<p>Contents of bacula-LUN.mount</p>
+<pre><code>[Unit]
+Description=Storage LUN mount for itself
+After=network.service NetworkManager.service
+
+[Mount]
+What=/dev/sdb1
+Where=/bacula/LUN
+Type=xfs
+Options=defaults
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>Contents of bacula-LUN.automount</p>
+<pre><code>[Unit]
+Description=Storage LUN automount for itself
+After=network.service NetworkManager.service
+
+[Automount]
+Where=/bacula/LUN
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>Contents of bacula-NFS.mount</p>
+<pre><code>[Unit]
+Description=Storage NFS mount for itself
+After=network.service NetworkManager.service
+
+[Mount]
+What=storage.sandbox.io:/var/nfs
+Where=/bacula/NFS
+Type=nfs
+Options=defaults
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>Contents of bacula-NFS.automount</p>
+<pre><code>[Unit]
+Description=Storage NFS automount for itself
+After= network.service NetworkManager.service
+
+[Automount]
+Where=/bacula/NFS
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<h3 id="bacula-setup">Bacula Setup</h3>
+<p>Setup bacula database.</p>
+<pre><code>- name: stat if bacula_sql_setup exists
+  stat:
+    path: /home/users/bot-acc/.system-checks/bacula_sql_setup
+  register: bacula_sql_setup
+- name: execute commands for bacula database
+  shell:
+    cmd: '{{item}}'
+  with_items:
+    - sudo -Hiu postgres /usr/libexec/bacula/create_postgresql_database
+    - sudo -Hiu postgres /usr/libexec/bacula/make_postgresql_tables
+    - sudo -Hiu postgres /usr/libexec/bacula/grant_postgresql_privileges
+    - sudo -Hiu postgres psql -U postgres -c "ALTER DATABASE bacula OWNER TO bacula"
+    - sudo -Hiu postgres psql -U postgres -c "ALTER USER bacula WITH PASSWORD 'Password123'"
+    - sudo -Hiu postgres psql -U postgres -c "ALTER USER postgres WITH PASSWORD 'Password321'"
+    - touch /home/users/bot-acc/.system-checks/bacula_sql_setup
+  when: not bacula_sql_setup.stat.exists
+</code></pre>
+<p>Copy the files</p>
+<pre><code>- name: replace files on /etc/bacula
+  copy:
+    src: 'files/backup/bacula-conf/{{item}}'
+    dest: '/etc/bacula'
+  with_items:
+    - bacula-dir.conf
+    - bacula-sd.conf
+    - bacula-fd.conf
+    - bconsole.conf
+- name: synchronized files in conf.d of /etc/bacula
+  synchronize:
+    src: 'files/backup/bacula-conf/nodes/'
+    dest: '/etc/bacula/conf.d'
+</code></pre>
+<h4 id="bacula-director-configuration">Bacula Director Configuration</h4>
+<p>Define Director function</p>
+<pre><code>Director {                           
+  Name = bacula-dir
+  DIRport = 9101  
+  QueryFile = "/etc/bacula/query.sql"
+  WorkingDirectory = "/var/spool/bacula"
+  PidDirectory = "/var/run"
+  Maximum Concurrent Jobs = 1
+  Password = "Password123!"  # Password for bconsole connection
+  Messages = Daemon
+  DirAddress = 127.0.0.1  # Director is installed in localhost
+}
+</code></pre>
+<p>JobDefs is defined definition for jobs created later</p>
+<pre><code>JobDefs {
+  Name = "DefaultJob"
+  Type = Backup
+  Level = Incremental
+  Client = Backup-Server #Move to Jobs
+  FileSet = "Full Set"
+  #Schedule = "WeeklyCycle"
+  Storage = File-LUN
+  Messages = Standard
+  Pool = File
+  Priority = 10
+  Write Bootstrap = "/var/spool/bacula/%c.bsr"
+}
+
+JobDefs {
+  Name = "RemoteDefault"
+  Type = Backup
+  Level = Incremental
+  FileSet = "FileSet-Sandbox"
+  #Schedule = "WeeklyCycle"
+  Storage = File-NFS
+  Messages = Standard
+  Priority = 10
+  Write Bootstrap = "/var/spool/bacula/%c.bsr"
+}
+</code></pre>
+<p>Define Jobs to be run for backup</p>
+<pre><code>Job {
+  Name = "Backup-Main"
+  JobDefs = "DefaultJob"
+}
+Job {
+  Name = "BackupCatalog"
+  JobDefs = "DefaultJob"
+  Level = Full
+  FileSet="Catalog"
+  #Schedule = "WeeklyCycleAfterBackup"
+  RunBeforeJob = "/usr/libexec/bacula/make_catalog_backup.pl MyCatalog"
+  RunAfterJob  = "/usr/libexec/bacula/delete_catalog_backup"
+  Write Bootstrap = "/var/spool/bacula/%n.bsr"
+  Priority = 11                   # run after main backup
+}
+</code></pre>
+<p>Define Jobs to be run for restore</p>
+<pre><code>Job {
+  Name = "Restore-Backup"
+  Type = Restore
+  Client= Backup-Server
+  FileSet="Full Set"
+  Storage = File-LUN
+  Pool = Default
+  Messages = Standard
+  Where = /tmp/bacula-restore
+}
+Job {
+  Name = "Restore-Remote"
+  Type = Restore
+  Client= DEV2
+  FileSet = "FileSet-Sandbox"
+  Storage = File-NFS
+  Pool = Default
+  Messages = Standard
+  Where = /tmp/bacula-restore
+}
+</code></pre>
+<p>FileSet define what to include and exclude</p>
+<pre><code>FileSet {
+  Name = "Full Set"
+  Include {
+    Options {
+      signature = MD5
+      compression = GZIP
+    }
+    File = /
+  }
+  Exclude {
+    File = /var/spool/bacula
+    File = /tmp
+    File = /proc
+    File = /tmp
+    File = /.journal
+    File = /.fsck
+    File = /bacula
+    File = /dev
+    File = /boot
+    File = /run
+    File = /sys
+  }
+}
+
+FileSet {
+  Name = "Catalog"
+  Include {
+    Options {
+      signature = MD5
+    }
+    File = "/var/spool/bacula/bacula.sql"
+  }
+}
+
+FileSet {
+  Name = "FileSet-Sandbox"
+  Include {
+    Options {
+      signature = MD5
+      compression = GZIP
+    }
+    File = /home
+    File = /etc
+    File = /opt
+    File = /var
+  }
+  Exclude {
+    File = /var/spool/bacula
+    File = /tmp
+    File = /proc
+    File = /tmp
+    File = /.journal
+    File = /.fsck
+    File = /bacula
+    File = /dev
+    File = /boot
+    File = /run
+    File = /sys
+ }
+}
+</code></pre>
+<p>Schedule define the time to run the backup, will not use it but good to be included</p>
+<pre><code>Schedule {
+  Name = "WeeklyCycle"
+  Run = Full 1st sun at 23:05
+  Run = Differential 2nd-5th sun at 23:05
+  Run = Incremental mon-sat at 23:05
+}
+Schedule {
+  Name = "WeeklyCycleAfterBackup"
+  Run = Full sun-sat at 23:10
+}
+</code></pre>
+<p>Storage define where the backup/restore location is, this is the connector to bacula-sd</p>
+<pre><code>Storage {
+  Name = File-LUN
+  Address = backup.sandbox.io     
+ed name here
+  SDPort = 9103
+  Password = "Password123!"
+  Device = LUNStorage
+  Media Type = File
+}
+Storage {
+  Name = File-NFS
+  Address = backup.sandbox.io 
+ed name here
+  SDPort = 9103
+  Password = "Password123!"
+  Device = NFSStorage
+  Media Type = File
+}
+</code></pre>
+<p>Define the Pool function </p>
+<pre><code>Pool {  
+  Name = Default
+  Pool Type = Backup
+  Recycle = yes            
+e Volumes
+  AutoPrune = yes               
+  Volume Retention = 365 days  
+}
+
+Pool {
+  Name = File
+  Pool Type = Backup
+  Label Format = BACKUP-Bacula-
+  Recycle = yes             
+e Volumes
+  AutoPrune = yes            
+  Volume Retention = 365 days 
+  Maximum Volume Bytes = 50G   
+reasonable
+  Maximum Volumes = 100      
+}
+
+Pool {
+  Name = Scratch
+  Pool Type = Backup
+}
+
+Pool {
+  Name = Pool-DEV2
+  Pool Type = Backup
+  Label Format = BACKUP-DEV2-
+  Recycle = yes                 
+e Volumes
+  AutoPrune = yes              
+  Volume Retention = 365 days  
+    Maximum Volume Bytes = 50G 
+g reasonable
+  Maximum Volumes = 100       
+}
+</code></pre>
+<p>Catalog function defines the database authentication</p>
+<pre><code>Catalog {
+  Name = MyCatalog
+  dbname = "bacula"; dbuser = "bacula"; dbpassword = "Password123"
+}
+</code></pre>
+<p>Not entirely sure on what console does as of the moment but will check on how</p>
+<pre><code>Console {
+  Name = bacula-mon
+  Password = "@@MON_DIR_PASSWORD@@"
+  CommandACL = status, .status
+}
+</code></pre>
+<p>Client defines all the nodes that will need to be backup</p>
+<pre><code>Client {
+  Name = Backup-Server
+  Address = backup.sandbox.io
+  FDPort = 9102
+  Catalog = MyCatalog
+  Password = "Password123!"
+  File Retention = 30 days   
+  Job Retention = 6 months  
+  AutoPrune = yes          
+}
+
+Client {
+  Name = @@CHANGE_THIS@@
+  Address = fqdn.sandbox.io
+  FDPort = 9102
+  Catalog = MyCatalog
+  Password = "Password123!"    
+n
+  File Retention = 30 days    
+  Job Retention = 6 months   
+  AutoPrune = yes           
+}
+</code></pre>
+<p>Add the following line in the config file for your config file to search created configurations in conf.d directory</p>
+<pre><code>@|"find /etc/bacula/conf.d -name '*.conf' -type f -exec echo @{} \;"
+</code></pre>
+<p>Check your work </p>
+<p><code>bacula-dir -tc /etc/bacula/bacula-dir.conf</code></p>
+<h4 id="bacula-storage-daemon-configuration">Bacula Storage Daemon Configuration</h4>
+<p>bacula-sd.conf will define all configuration for bacula-sd service</p>
+<p>Define Storage function </p>
+<pre><code>Storage {              
+  Name = bacula-sd
+  SDPort = 9103               
+  WorkingDirectory = "/var/spool/bacula"
+  Pid Directory = "/var/run"
+  Maximum Concurrent Jobs = 20
+  SDAddress = backup.sandbox.io
+}
+</code></pre>
+<p>Define Director authentication</p>
+<pre><code>Director {
+  Name = bacula-dir
+  Password = "Password123!"
+}
+</code></pre>
+<p>Device directive will choose where you want to put your files</p>
+<pre><code>Device {
+  Name = LUNStorage
+  Media Type = File
+  Archive Device = /tmp
+  LabelMedia = yes;                   # lets Bacula label unlabeled med
+ia
+  Archive Device = /bacula/LUN
+  Random Access = Yes;
+  AutomaticMount = yes;               # when device opened, read it
+  RemovableMedia = no;
+  AlwaysOpen = no;
+}
+Device {
+  Name = NFSStorage
+  Media Type = File
+  Archive Device = /tmp
+  LabelMedia = yes;                   # lets Bacula label unlabeled me$
+ia
+  Archive Device = /bacula/NFS
+  Random Access = Yes;
+  AutomaticMount = yes;               # when device opened, read it
+  RemovableMedia = no;
+  AlwaysOpen = no;
+}
+</code></pre>
+<p>Check your configuration</p>
+<p><code>bacula-sd -tc /etc/bacula/bacula-sd.conf</code></p>
+<h4 id="bacula-file-daemonclient-configuration">Bacula File Daemon(Client) Configuration</h4>
+<p>Define director function for authentication on file daemon</p>
+<pre><code>Director {
+  Name = bacula-dir
+  Password = "Password123!"
+}
+</code></pre>
+<p>This is the only directives that is needed to change, else is optional </p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../app/" class="btn btn-neutral float-right" title="Application">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../storage/" class="btn btn-neutral" title="Storage"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../storage/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../app/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

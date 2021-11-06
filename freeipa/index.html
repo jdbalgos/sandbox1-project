@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="canonical" href="http://docs.sandbox.io/freeipa/">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>FreeIPA - Deve Linux Sandbox Project</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "FreeIPA";
+    var mkdocs_page_input_path = "freeipa.md";
+    var mkdocs_page_url = "/freeipa/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Deve Linux Sandbox Project</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../gateway/">DNS and DHCP</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../spacewalk/">Spacewalk</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">FreeIPA</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#dhcp-and-dns-entries">DHCP and DNS Entries</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#installing-freeipa-server">Installing FreeIPA Server</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#installing-freeipa-client">Installing FreeIPA Client</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../bot/">Automation</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../storage/">Storage</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../backup/">Backup</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../app/">Application</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../mail/">Mail</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../others/">Others</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Deve Linux Sandbox Project</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>FreeIPA</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="freeipa-documentation">FreeIPA Documentation</h1>
+<h2 id="dhcp-and-dns-entries">DHCP and DNS Entries</h2>
+<p>Forward lookup zone</p>
+<pre><code>@               IN      NS      directory.sandbox.io.
+directory       IN      A       10.11.100.102
+</code></pre>
+<p>Reverse lookup zone</p>
+<pre><code>@               IN      NS      directory.sandbox.io.
+directory       IN      A       10.11.100.102
+102             IN      PTR     directory.sandbox.io.
+</code></pre>
+<p>DHCP client entry</p>
+<pre><code>host directory {
+        hardware ethernet 32:80:18:70:D6:CA;
+        fixed-address 10.11.100.102;
+}
+</code></pre>
+<h2 id="installation">Installation</h2>
+<h3 id="prerequisites">Prerequisites</h3>
+<p>TCP Open Ports:
+- 80, 443: HTTP/HTTPS
+- 389, 636: LDAP/LDAPS
+- 88, 464: Kerberos</p>
+<p>UDP Open Ports:
+- 88, 464: Kerberos
+- 123: NTP</p>
+<p>2Gb Recommended RAM, though the RAM usage will average to 1.3Gb it will be faster to boot on 2Gb of memory.</p>
+<h3 id="installing-freeipa-server">Installing FreeIPA Server</h3>
+<p>Install FreeIPA server using </p>
+<p><code>yum -y install ipa-server</code></p>
+<p>Once the packages are install you can continue installation by using <code>ipa-server-install</code> </p>
+<pre><code>[root@directory ~]# ipa-server-install
+
+The log file for this installation can be found in /var/log/ipaserver-install.log
+==============================================================================
+This program will set up the IPA Server.
+
+This includes:
+  * Configure a stand-alone CA (dogtag) for certificate management
+  * Configure the Network Time Daemon (ntpd)
+  * Create and configure an instance of Directory Server
+  * Create and configure a Kerberos Key Distribution Center (KDC)
+  * Configure Apache (httpd)
+  * Configure the KDC to enable PKINIT
+</code></pre>
+<p>The command will ask for things you need to fill up, you should leave all default if you are using the freeipa server as kerberos authentication too. All default answers will be encapsulated with <code>[ ]</code> </p>
+<pre><code>To accept the default shown in brackets, press the Enter key.
+
+WARNING: conflicting time&amp;date synchronization service 'chronyd' will be disabled
+in favor of ntpd
+
+Do you want to configure integrated DNS (BIND)? [no]:
+
+Enter the fully qualified domain name of the computer
+on which you are setting up server software. Using the form
+&lt;hostname&gt;.&lt;domainname&gt;
+Example: master.example.com.
+
+
+Server host name [directory.sandbox.io]:
+
+The domain name has been determined based on the host name.
+
+Please confirm the domain name [sandbox.io]:
+
+The kerberos protocol requires a Realm name to be defined.
+This is typically the domain name converted to uppercase.
+
+Please provide a realm name [SANDBOX.IO]:
+</code></pre>
+<p>This will also ask for manager and admin password, set it up</p>
+<pre><code>Certain directory server operations require an administrative user.
+This user is referred to as the Directory Manager and has full access
+to the Directory for system management tasks and will be added to the
+instance of directory server created for IPA.
+The password must be at least 8 characters long.
+
+Directory Manager password:
+Password (confirm):
+
+The IPA server requires an administrative user, named 'admin'.
+This user is a regular system account used for IPA server administration.
+
+IPA admin password:
+Password (confirm):
+</code></pre>
+<p>Once done, it will prompt you to configure the freeipa server with the set values, type yes.</p>
+<pre><code>The IPA Master Server will be configured with:
+Hostname:       directory.sandbox.io
+IP address(es): 10.11.100.200
+Domain name:    sandbox.io
+Realm name:     SANDBOX.IO
+
+Continue to configure the system with these values? [no]: yes
+</code></pre>
+<p>It will start configuring itself, after setting up it will also note you to open necessary ports for the server to be able to communicate outside</p>
+<pre><code>...
+SSSD enabled
+Configured /etc/openldap/ldap.conf
+Configured /etc/ssh/ssh_config
+Configured /etc/ssh/sshd_config
+Configuring sandbox.io as NIS domain.
+Client configuration complete.
+The ipa-client-install command was successful
+
+Please add records in this file to your DNS system: /tmp/ipa.system.records.zcm0BH.db
+==============================================================================
+Setup complete
+
+Next steps:
+        1. You must make sure these network ports are open:
+                TCP Ports:
+                  * 80, 443: HTTP/HTTPS
+                  * 389, 636: LDAP/LDAPS
+                  * 88, 464: kerberos
+                UDP Ports:
+                  * 88, 464: kerberos
+                  * 123: ntp
+
+        2. You can now obtain a kerberos ticket using the command: 'kinit admin'
+           This ticket will allow you to use the IPA tools (e.g., ipa user-add)
+           and the web user interface.
+
+Be sure to back up the CA certificates stored in /root/cacert.p12
+These files are required to create replicas. The password for these
+files is the Directory Manager password
+</code></pre>
+<p>The installer will also provide DNS entries for you to put in your DNS server</p>
+<pre><code>_kerberos-master._tcp.sandbox.io. 86400 IN SRV 0 100 88 directory.sandbox.io.
+_kerberos-master._udp.sandbox.io. 86400 IN SRV 0 100 88 directory.sandbox.io.
+_kerberos._tcp.sandbox.io. 86400 IN SRV 0 100 88 directory.sandbox.io.
+_kerberos._udp.sandbox.io. 86400 IN SRV 0 100 88 directory.sandbox.io.
+_kerberos.sandbox.io. 86400 IN TXT "SANDBOX.IO"
+_kpasswd._tcp.sandbox.io. 86400 IN SRV 0 100 464 directory.sandbox.io.
+_kpasswd._udp.sandbox.io. 86400 IN SRV 0 100 464 directory.sandbox.io.
+_ldap._tcp.sandbox.io. 86400 IN SRV 0 100 389 directory.sandbox.io.
+_ntp._udp.sandbox.io. 86400 IN SRV 0 100 123 directory.sandbox.io.
+</code></pre>
+<p>Open the necessary ports to firewall</p>
+<pre><code>[root@directory ~]# firewall-cmd --add-port={80,443,389,636,88,464}/tcp
+success
+[root@directory ~]# firewall-cmd --add-port={88,464,123}/udp
+success
+[root@directory ~]# firewall-cmd --list-all
+public (active)
+  target: default
+  icmp-block-inversion: no
+  interfaces: eth0
+  sources:
+  services: dhcpv6-client ssh
+  ports: 80/tcp 443/tcp 389/tcp 636/tcp 88/tcp 464/tcp 88/udp 464/udp 123/udp
+  protocols:
+  masquerade: no
+  forward-ports:
+  source-ports:
+  icmp-blocks:
+  rich rules:
+</code></pre>
+<p>The installation is now complete, you may want to add users/group via command line or the browser.</p>
+<h3 id="installing-freeipa-client">Installing FreeIPA Client</h3>
+<p>Install FreeIPA client</p>
+<p><code>yum install -y ipa-client</code></p>
+<p>Setup FreeIPA Client using <code>ipa-client-install --mkhomedir</code>, the server will automatically search the directory server. </p>
+<pre><code>[root@docs ~]# ipa-client-install --mkhomedir
+WARNING: ntpd time&amp;date synchronization service will not be configured as
+conflicting service (chronyd) is enabled
+Use --force-ntpd option to disable it and force configuration of ntpd
+
+Discovery was successful!
+Client hostname: docs.sandbox.io
+Realm: SANDBOX.IO
+DNS Domain: sandbox.io
+IPA Server: directory.sandbox.io
+BaseDN: dc=sandbox,dc=io
+
+Continue to configure the system with these values? [no]: yes
+Skipping synchronizing time with NTP server.
+User authorized to enroll computers: dbalgos
+Password for dbalgos@SANDBOX.IO:
+Successfully retrieved CA cert
+    Subject:     CN=Certificate Authority,O=SANDBOX.IO
+    Issuer:      CN=Certificate Authority,O=SANDBOX.IO
+    Valid From:  2021-08-16 05:49:51
+    Valid Until: 2041-08-16 05:49:51
+
+Enrolled in IPA realm SANDBOX.IO
+Created /etc/ipa/default.conf
+New SSSD config will be created
+Configured sudoers in /etc/nsswitch.conf
+...
+Configuring sandbox.io as NIS domain.
+Client configuration complete.
+The ipa-client-install command was successful
+</code></pre>
+<p>You can now login any account registered in the FreeIPA server</p>
+<pre><code>[root@docs ~]# id dbalgos
+uid=779800005(dbalgos) gid=779800005(dbalgos) groups=779800005(dbalgos),779800000(admins)
+</code></pre>
+<p>In case we want to uninstall, we can use <code>ipa-client-install --uninstall</code> command</p>
+<pre><code>[root@directory ~]# ipa-client-install --uninstall
+Unenrolling client from IPA server
+Unenrolling host failed: Error obtaining initial credentials: Cannot contact any KDC for requested realm.
+
+Removing Kerberos service principals from /etc/krb5.keytab
+Disabling client Kerberos and LDAP configurations
+Redundant SSSD configuration file /etc/sssd/sssd.conf was moved to /etc/sssd/sssd.conf.deleted
+Restoring client configuration files
+Unconfiguring the NIS domain.
+nscd daemon is not installed, skip configuration
+nslcd daemon is not installed, skip configuration
+Systemwide CA database updated.
+Client uninstall complete.
+The original nsswitch.conf configuration has been restored.
+You may need to restart services or reboot the machine.
+Do you want to reboot the machine? [no]: y
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../bot/" class="btn btn-neutral float-right" title="Automation">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../spacewalk/" class="btn btn-neutral" title="Spacewalk"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../spacewalk/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../bot/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

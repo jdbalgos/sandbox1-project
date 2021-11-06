@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="canonical" href="http://docs.sandbox.io/gateway/">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>DNS and DHCP - Deve Linux Sandbox Project</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "DNS and DHCP";
+    var mkdocs_page_input_path = "gateway.md";
+    var mkdocs_page_url = "/gateway/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Deve Linux Sandbox Project</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">DNS and DHCP</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#dhcp-server-setup">DHCP server setup</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#dns-server-setup">DNS Server setup</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#namedconf-configuration">named.conf configuration</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#forward-and-reverse-lookup-zone">Forward and reverse lookup zone</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#firewall-plus-other-settings">Firewall plus other settings</a>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../spacewalk/">Spacewalk</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../freeipa/">FreeIPA</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../bot/">Automation</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../storage/">Storage</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../backup/">Backup</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../app/">Application</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../mail/">Mail</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../others/">Others</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Deve Linux Sandbox Project</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>DNS and DHCP</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="dns-and-dhcp-server">DNS and DHCP Server</h1>
+<p>This server was previously created long before and cannot find my own documentation on this when i created it, so most of the instructions are from what i remember.</p>
+<h2 id="installation">Installation</h2>
+<p>Ensure the machine has a second NIC, in this example the second NIC will be named as eth1 </p>
+<p>Install the following packages:</p>
+<pre><code>iptables(remove firewalld if installed on the machine)
+bind, bind-utils, bind-libs
+dhcp
+</code></pre>
+<p><code>yum install -y iptables bind bind-utils bind-libs dhcp</code></p>
+<p><code>systemctl stop firewalld &amp;&amp; systemctl disable firewalld</code></p>
+<p>eth1 configuration must be set below:</p>
+<pre><code>DEVICE=eth1
+BOOTPROTO=none
+IPADDR=10.11.100.1
+NETMASK=255.255.255.0
+ONBOOT=yes
+NM_CONTROLLED=no
+TYPE=Ethernet
+DNS1="127.0.0.1"
+</code></pre>
+<h2 id="dhcp-server-setup">DHCP server setup</h2>
+<p>Edit dhcpd.conf to use spacewalk ip address as next-server for pxe</p>
+<pre><code>default-lease-time 600;
+max-lease-time 7200;
+log-facility local7;
+authoritative;
+ignore client-updates;
+
+subnet 10.11.100.0 netmask 255.255.255.0{
+        range 10.11.100.10 10.11.100.50;
+        option routers 10.11.100.1;
+        option subnet-mask 255.255.255.0;
+        option domain-name-servers 10.11.100.1;
+        option domain-name "sandbox.io";
+        next-server 10.11.100.101;
+        filename "pxelinux.0";
+}
+</code></pre>
+<p>For static IP assigning, see below as an example: </p>
+<pre><code>host spacewalk {
+        hardware ethernet 3E:D1:95:C2:49:9C;
+        fixed-address 10.11.100.101;
+}
+</code></pre>
+<p>Enable and start dhcpd server</p>
+<p><code>systemctl enable dhcpd</code></p>
+<p><code>systemctl start dhcpd</code></p>
+<h2 id="dns-server-setup">DNS Server setup</h2>
+<h3 id="namedconf-configuration">named.conf configuration</h3>
+<p>Edit /etc/named.conf file, this file is the main configuration file of the bind package manager</p>
+<pre><code>options {
+        listen-on port 53 { 127.0.0.1; 10.11.100.1; };
+        listen-on-v6 port 53 { ::1; };
+        directory       "/var/named";
+        dump-file       "/var/named/data/cache_dump.db";
+        statistics-file "/var/named/data/named_stats.txt";
+        memstatistics-file "/var/named/data/named_mem_stats.txt";
+        recursing-file  "/var/named/data/named.recursing";
+        secroots-file   "/var/named/data/named.secroots";
+        allow-query     { localhost; 10.11.100.0/24; };
+        allow-transfer  { localhost; 192.168.254.254; };
+        recursion yes;
+        dnssec-enable yes;
+        dnssec-validation yes;
+        bindkeys-file "/etc/named.iscdlv.key";
+        managed-keys-directory "/var/named/dynamic";
+        pid-file "/run/named/named.pid";
+        session-keyfile "/run/named/session.key";
+};
+</code></pre>
+<p>On the lower part of /etc/named.conf file, add the filenames on where you will put DNS records.</p>
+<pre><code>zone "." IN {
+        type hint;
+        file "named.ca";
+};
+
+zone "sandbox.io" IN {
+        type master;
+        file "sandbox.forward";
+        allow-update { none; };
+};
+
+zone "100.11.10.in-addr.arpa" IN {
+        type master;
+        file "sandbox.reverse";
+        allow-update { none; };
+};
+</code></pre>
+<h3 id="forward-and-reverse-lookup-zone">Forward and reverse lookup zone</h3>
+<p>The file sandbox.forward and sandbox.reverse that was stated in named.conf file needs to be created in /var/named</p>
+<p><code>touch /var/named/sandbox.forward</code></p>
+<p><code>touch /var/named/sandbox.reverse</code></p>
+<p>Both of those file will have the same heading template like below in order to work</p>
+<pre><code>$TTL 86400
+@       IN      SOA     dnsdhcp.sandbox.io.     root.sandbox.io (
+        2011071001      ;Serial
+        3600    ;Refresh
+        1800    ;Retry
+        604800  ;Expire
+        86400   ;Minimum TTL
+)
+</code></pre>
+<p>For every hostname, domain name should be stated with its ip address</p>
+<p>/etc/named/sandbox.forward</p>
+<pre><code>@           IN  NS  dnsdhcp.sandbox.io.
+@           IN  A   10.11.100.1
+dnsdhcp     IN  A   10.11.100.1
+dns-dhcp    IN CNAME    dnsdhcp #if CNAME is needed
+</code></pre>
+<p>/etc/named/sandbox.reverse</p>
+<pre><code>@           IN  NS  dnsdhcp.sandbox.io.
+dnsdhcp     IN  A   10.11.100.1
+1           IN  PTR dnsdhcp.sandbox.io.
+</code></pre>
+<p>Start and enable bind service</p>
+<p><code>systemctl enable named</code></p>
+<p><code>systemctl start named</code></p>
+<h2 id="firewall-plus-other-settings">Firewall plus other settings</h2>
+<p>Iptables firewall configuration must be configured same as below</p>
+<pre><code>*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [33:3512]
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -p icmp -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT
+-A INPUT -i eth1 -s 10.11.100.0/24 -p tcp --dport 53 -j ACCEPT
+-A INPUT -i eth1 -s 10.11.100.0/24 -p udp --dport 53 -j ACCEPT
+-A INPUT -i eth1 -s 10.11.100.0/24 -p tcp --dport 80 -j ACCEPT
+-A INPUT -j REJECT --reject-with icmp-host-prohibited
+-A FORWARD -i eth0 -o eth1 -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A FORWARD -i eth1 -o eth0 -j ACCEPT
+-A FORWARD -j REJECT --reject-with icmp-host-prohibited
+COMMIT
+*nat
+:PREROUTING ACCEPT [76:8121]
+:INPUT ACCEPT [0:0]
+:OUTPUT ACCEPT [6:1968]
+:POSTROUTING ACCEPT [6:1968]
+-A POSTROUTING -o eth0 -j MASQUERADE
+COMMIT
+</code></pre>
+<p>execute this on the command line to add ip forwarding in sysctl.conf</p>
+<p><code>echo net.ipv4.ip_forward = 1 &gt;&gt; /etc/sysctl.conf</code> </p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../spacewalk/" class="btn btn-neutral float-right" title="Spacewalk">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href=".." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../spacewalk/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

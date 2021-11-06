@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="canonical" href="http://docs.sandbox.io/app/">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Application - Deve Linux Sandbox Project</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Application";
+    var mkdocs_page_input_path = "app.md";
+    var mkdocs_page_url = "/app/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Deve Linux Sandbox Project</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../gateway/">DNS and DHCP</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../spacewalk/">Spacewalk</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../freeipa/">FreeIPA</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../bot/">Automation</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../storage/">Storage</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../backup/">Backup</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Application</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#scope">Scope</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#dhcp-and-dns-entries">DHCP and DNS Entries</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#app1-and-app2-servers">App1 and App2 Servers</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#installation-and-setup">Installation and Setup</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#issues">Issues</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#running-on-lxc">Running on LXC</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#running-on-kvm">Running on KVM</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#load-balancer-setup">Load Balancer Setup</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#installation-and-setup_1">Installation and Setup</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../mail/">Mail</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../others/">Others</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Deve Linux Sandbox Project</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Application</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="application-server">Application Server</h1>
+<h2 id="scope">Scope</h2>
+<p>I will install 2 tomcat applications on each server running high availability setup, that is being proxied by httpd application to port 80, and will be load balance by another server installed with haproxy. app1 and app2 will synct through multicast</p>
+<pre><code>ldb.sandbox.io --&gt; app1.sandbox.io:80 -&gt; app1.sandbox.io:8080 --
+
+                |                                               |--&gt; application(HA)
+
+                -&gt; app2.sandbox.io:80 -&gt; app2.sandbox.io:8080 --
+</code></pre>
+<p>Simple application that will be run will be a java webpage that ensures sessions were retained after submitting request</p>
+<pre><code>#index.jsp
+&lt;%@page import="java.util.ArrayList"%&gt;
+&lt;%@page import="java.util.Date"%&gt;
+&lt;%@page import="java.util.List"%&gt;
+&lt;%@page contentType="text/html" pageEncoding="UTF-8"%&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+        &lt;title&gt;JSP Page&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+&lt;FONT size = 5 COLOR="#0000FF"&gt;
+        Instance 1 &lt;br/&gt;&lt;br/&gt;
+        &lt;/FONT&gt;
+        &lt;hr/&gt;
+        &lt;FONT size = 5 COLOR="#CC0000"&gt;
+         &lt;br/&gt;
+        Session Id : &lt;%=request.getSession().getId()%&gt; &lt;br/&gt;
+        Is it New Session : &lt;%=request.getSession().isNew()%&gt;&lt;br/&gt;
+        Session Creation Date : &lt;%=new Date(request.getSession().getCreationTime())%&gt;&lt;br/&gt;
+        Session Access Date : &lt;%=new Date(request.getSession().getLastAccessedTime())%&gt;&lt;br/&gt;&lt;br/&gt;
+        &lt;/FONT&gt;
+        &lt;b&gt;Cart List &lt;/b&gt;&lt;br/&gt;
+        &lt;hr/&gt;
+        &lt;ul&gt;
+        &lt;%
+                String bookName = request.getParameter("bookName");
+                List&lt;String&gt; listOfBooks = (List&lt;String&gt;) request.getSession().getAttribute("Books");
+                if (listOfBooks == null) {
+                    listOfBooks = new ArrayList&lt;String&gt;();
+                    request.getSession().setAttribute("Books", listOfBooks);
+                }
+                if (bookName != null) {
+                    listOfBooks.add(bookName);
+            request.getSession().setAttribute("Books", listOfBooks);
+                }
+                for (String book : listOfBooks) {
+                    out.println("&lt;li&gt;"+book + "&lt;/li&gt;&lt;br/&gt;");
+                }
+        %&gt;
+        &lt;/ul&gt;
+        &lt;hr/&gt;
+        &lt;form action="index.jsp" method="post"&gt;
+            Book Name &lt;input type="text" name="bookName" /&gt;
+            &lt;input type="submit" value="Add to Cart"/&gt;
+        &lt;/form&gt;
+        &lt;hr/&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h2 id="dhcp-and-dns-entries">DHCP and DNS Entries</h2>
+<p>Forward lookup zone</p>
+<pre><code>@                   IN  NS      app1.sandbox.io.
+@                   IN  NS      app2.sandbox.io.
+@                   IN  NS      ldb.sandbox.io.
+app1        IN  A   10.11.100.108
+app2        IN  A   10.11.100.109
+ldb         IN  A   10.11.100.110
+app         IN  CNAME   ldb
+</code></pre>
+<p>Reverse lookup zone</p>
+<pre><code>@           IN  NS  app1.sandbox.io.
+@           IN  NS  app2.sandbox.io.
+@           IN  NS  ldb.sandbox.io.
+app1        IN  A   10.11.100.108
+app2        IN  A   10.11.100.109
+ldb         IN  A   10.11.100.110
+108         IN  PTR app1.sandbox.io.
+109         IN  PTR app2.sandbox.io.
+110         IN  PTR ldb.sandbox.io.
+</code></pre>
+<p>DHCP client entries</p>
+<pre><code>host app1 {
+    hardware ethernet 2E:A5:8D:FB:B9:F8;
+    fixed-address 10.11.100.108;
+}
+--
+host app2{
+    hardware ethernet AE:45:14:38:61:C3;
+    fixed-address 10.11.100.109;
+}
+--
+host ldb {
+    hardware ethernet 4E:D6:AE:43:D4:84;
+    fixed-address 10.11.100.110;
+}
+</code></pre>
+<h2 id="app1-and-app2-servers">App1 and App2 Servers</h2>
+<h3 id="installation-and-setup">Installation and Setup</h3>
+<p>Needed to install the following package:</p>
+<ul>
+<li>tomcat</li>
+<li>httpd</li>
+<li>tomcat-webapps</li>
+<li>tomcat-admin-webapps</li>
+</ul>
+<p>This can be done by yum or ansible</p>
+<p><code>yum -y install tomcat httpd tomcat-webapps tomcat-admin-webapps</code></p>
+<pre><code>- name: install tomcat application
+  yum:
+    name:
+      - tomcat
+      - tomcat-webapps
+      - tomcat-admin-webapps
+      - httpd
+</code></pre>
+<p>Instruct tomcat to only allow 256mb of memory. </p>
+<p><code>echo 'JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true -Xmx256m -XX:MaxPermSize=256m -XX:+UseConcMarkSweepGC"' &gt; /usr/share/tomcat/conf/tomcat.conf</code></p>
+<pre><code>- name: add JAVA_OPTS option to limit max permit memory size for each tomcat instances
+  blockinfile:
+    path: /usr/share/tomcat/conf/tomcat.conf
+    block: 'JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true -Xmx256m -XX:MaxPermSize=256m -XX:+UseConcMarkSweepGC"'
+    state: present
+</code></pre>
+<p>Add manager credentials for testing tomcat</p>
+<pre><code>- name: add admin user for manage login
+  lineinfile:
+    insertafter: '&lt;tomcat-users&gt;'
+    path: /usr/share/tomcat/conf/tomcat-users.xml
+    line: '&lt;user username="admin" password="Password123!" roles="manager-gui,admin-gui"/&gt;'
+</code></pre>
+<p>add ports for exception in firewall</p>
+<pre><code>- name: add ports to firewalld
+  firewalld:
+    port: '{{item}}'
+    state: enabled
+    immediate: true
+    permanent: true
+  with_items:
+    - 8080/tcp
+    - 80/tcp
+    - 4000/tcp
+</code></pre>
+<p>Since this setup will be needing multicast, need to allow multicast address </p>
+<pre><code>- name: add multicast address to firewalld
+  firewalld:
+    rich_rule: rule family="ipv4" destination address="228.0.0.4" protocol value="ip" accept
+    permanent: true
+    immediate: true
+    state: enabled
+</code></pre>
+<p>Create directories</p>
+<pre><code>- name: create directories for sites-enabled, sites-available and test directory for tomcat
+  file:
+    state: directory
+    path: '{{item}}'
+  with_items:
+    - /etc/httpd/sites-enabled
+    - /etc/httpd/sites-available
+    - /var/lib/tomcat/webapps/test
+    - /var/lib/tomcat/webapps/test/WEB-INF
+    - /var/www/sandbox
+</code></pre>
+<p>Insert the index.jsp file to the newly created test directory</p>
+<pre><code>- name: create test application file
+  copy:
+    src: files/app/test-index.jsp
+    dest: /var/lib/tomcat/webapps/test/index.jsp
+</code></pre>
+<p>Copy each virtual host file and paste it on /etc/httpd/sites-available on each server</p>
+<pre><code>- name: copy http tomcat configuration file for app1
+  copy:
+    src: files/app/tomcat1.conf
+    dest: /etc/httpd/sites-available/tomcat.conf
+  when: ansible_hostname == "app1"
+- name: copy http tomcat configuration file for app2
+  copy:
+    src: files/app/tomcat2.conf
+    dest: /etc/httpd/sites-available/tomcat.conf
+  when: ansible_hostname == "app2"
+</code></pre>
+<p>Contents of tomcat1.conf and tomcat2.conf</p>
+<pre><code># tomcat1.conf 
+&lt;VirtualHost *:80&gt;
+  ServerAdmin webmaster@sandbox.io
+  DocumentRoot /var/www/sandbox
+  ServerName app1.sandbox.io
+  ServerAlias
+  RewriteEngine On
+  RewriteRule ^/(.*)  http://app1.sandbox.io:8080/test/ [P]
+  ProxyPassReverse / http://app1.sandbox.io:8080/test/
+  ProxyPassReverseCookiePath /test /
+  ErrorLog /var/log/httpd/app1_error.log
+  CustomLog /var/log/httpd/app1_common.log combined
+&lt;/VirtualHost&gt;
+# tomcat2.conf
+&lt;VirtualHost *:80&gt;
+  ServerAdmin webmaster@sandbox.io
+  DocumentRoot /var/www/sandbox
+  ServerName app2.sandbox.io
+  ServerAlias
+  RewriteEngine On
+  RewriteRule ^/(.*)  http://app2.sandbox.io:8080/test/ [P]
+  ProxyPassReverse / http://app2.sandbox.io:8080/test/
+  ProxyPassReverseCookiePath /test /
+  ErrorLog /var/log/httpd/app2_error.log
+  CustomLog /var/log/httpd/app2_common.log combined
+&lt;/VirtualHost&gt;
+</code></pre>
+<p>Create a softlink of virtualhost file to /etc/httpd/sites-enabled/</p>
+<pre><code>- name: create link of tomcat.conf to sites-enabled
+  file:
+    src: /etc/httpd/sites-available/tomcat.conf
+    dest: /etc/httpd/sites-enabled/tomcat.conf
+    state: link
+</code></pre>
+<p>Add 'IncludeOptional sites-enabled/*.conf' in /etc/httpd/conf/httpd.conf to add all conf files in sites-enabled directory</p>
+<pre><code>- name: add line to /etc/httpd/conf/httpd.conf
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    line: 'IncludeOptional sites-enabled/*.conf'
+- name: set boolean for httpd_can_network_connect to true
+</code></pre>
+<p>Create labels for tomcat setup on both servers</p>
+<pre><code>- name: create labels on each node in /etc/tomcat/server.xml for app1
+  lineinfile:
+    path: /etc/tomcat/server.xml
+    regexp: 'Engine name="Catalina"'
+    line: '&lt;Engine name="Catalina" defaultHost="localhost" jvmRoute="tomcat1"&gt;'
+  when: ansible_hostname == "app1"
+- name: create labels on each node in /etc/tomcat/server.xml for app2
+  lineinfile:
+    path: /etc/tomcat/server.xml
+    regexp: 'Engine name="Catalina"'
+    line: '&lt;Engine name="Catalina" defaultHost="localhost" jvmRoute="tomcat2"&gt;'
+  when: ansible_hostname == "app2"
+</code></pre>
+<p>Create web.xml file /var/lib/tomcat/webapps/test/WEB-INF/ directory</p>
+<pre><code>- name: add web.xml file to test directory
+  copy:
+    src: files/app/web.xml
+    dest: /var/lib/tomcat/webapps/test/WEB-INF/web.xml
+</code></pre>
+<p>Contents of web.xml</p>
+<pre><code>&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;web-app xmlns="http://java.sun.com/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                      http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+  version="3.0"
+  metadata-complete="true"&gt;
+  &lt;display-name&gt;Welcome to Tomcat&lt;/display-name&gt;
+  &lt;description&gt;
+     Welcome to Tomcat
+  &lt;/description&gt;
+&lt;distributable/&gt;
+&lt;/web-app&gt;
+</code></pre>
+<p>Need to add the cluster function on /etc/tomcat/server.xml ive done this via blockinline on ansible</p>
+<pre><code>- name: add line block on /etc/tomcat/server.xml
+  blockinfile:
+    path: /etc/tomcat/server.xml
+    marker: "&lt;!-- {mark} ANSIBLE MANAGED BLOCK --&gt;"
+    insertafter: '&lt;Engine name="Catalina" defaultHost="localhost"'
+    backup: true
+    block: |
+      &lt;Cluster className="org.apache.catalina.ha.tcp.SimpleTcpCluster" channelSendOptions="8"&gt;
+        &lt;Manager className="org.apache.catalina.ha.session.DeltaManager" expireSessionsOnShutdown="false" notifyListenersOnReplication="true"/&gt;
+        &lt;Channel className="org.apache.catalina.tribes.group.GroupChannel"&gt;
+          &lt;Membership className="org.apache.catalina.tribes.membership.McastService" address="228.0.0.4" port="45564" frequency="500" dropTime="3000"/&gt;
+          &lt;Sender className="org.apache.catalina.tribes.transport.ReplicationTransmitter"&gt;
+            &lt;Transport className="org.apache.catalina.tribes.transport.nio.PooledParallelSender"/&gt;
+          &lt;/Sender&gt;
+          &lt;Receiver className="org.apache.catalina.tribes.transport.nio.NioReceiver" address="auto" port="4000" autoBind="100" selectorTimeout="5000" maxThreads="6"/&gt;
+          &lt;Interceptor className="org.apache.catalina.tribes.group.interceptors.TcpFailureDetector"/&gt;
+          &lt;Interceptor className="org.apache.catalina.tribes.group.interceptors.MessageDispatch15Interceptor"/&gt;
+        &lt;/Channel&gt;
+        &lt;Valve className="org.apache.catalina.ha.tcp.ReplicationValve" filter=""/&gt;
+        &lt;Valve className="org.apache.catalina.ha.session.JvmRouteBinderValve"/&gt;
+        &lt;ClusterListener className="org.apache.catalina.ha.session.JvmRouteSessionIDBinderListener"/&gt;
+        &lt;ClusterListener className="org.apache.catalina.ha.session.ClusterSessionListener"/&gt;
+      &lt;/Cluster&gt;
+</code></pre>
+<p>Start the services</p>
+<pre><code>- name: start httpd
+  service:
+    name: httpd
+    state: restarted
+    enabled: true
+- name: start tomcat service
+  service:
+    name: tomcat
+    state: restarted
+    enabled: true
+</code></pre>
+<h3 id="issues">Issues</h3>
+<h4 id="running-on-lxc">Running on LXC</h4>
+<p>Synching issues may happen if your running on linux container, this is due to tomcat app and /etc/hosts file of the lxc not correctly getting the servers own IP. Edit /etc/nsswitch if you want a simpler fix. </p>
+<pre><code>- name: swap dns and files entry on /etc/nsswitch
+  lineinfile:
+    path: /etc/nsswitch.conf
+    regexp: '^hosts'
+    line: 'hosts:      dns files myhostname'
+  when: ansible_virtualization_type == "lxc"
+</code></pre>
+<h4 id="running-on-kvm">Running on KVM</h4>
+<p>unlike LXC, you can run selinux on KVM and can cause issues, recommended to change booleans instead of disabling it permanently</p>
+<pre><code>- name: set boolean for httpd_can_network_connect to true
+  seboolean:
+    name: '{{item}}'
+    persistent: true
+    state: true
+  with_items:
+    - httpd_can_network_connect
+    - nis_enabled
+  when: ansible_virtualization_type == "kvm"
+</code></pre>
+<h2 id="load-balancer-setup">Load Balancer Setup</h2>
+<p>Configuration on load balancer is simple</p>
+<h3 id="installation-and-setup_1">Installation and Setup</h3>
+<p>Install haproxy to the load balancer </p>
+<pre><code>- name: install haproxy to the server
+  yum:
+   name: haproxy
+   state: present
+</code></pre>
+<p>replace haproxy.cfg with the configured one</p>
+<pre><code>- name: copy haproxy.cfg file /etc/haproxy/haproxy.cfg
+  copy:
+    src: files/haproxy/haproxy.cfg
+    dest: /etc/haproxy/haproxy.cfg
+</code></pre>
+<p>Contents of configured haproxy.cfg</p>
+<pre><code>#/etc/haproxy/haproxy.cfg    
+global
+    log         127.0.0.1 local2
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    maxconn     4000
+    user        haproxy
+    group       haproxy
+    daemon
+    stats socket /var/lib/haproxy/stats
+
+defaults
+    mode                    http
+    log                     global
+    option                  httplog
+    option                  dontlognull
+    option http-server-close
+    option forwardfor       except 127.0.0.0/8
+    option                  redispatch
+    retries                 3
+    timeout http-request    10s
+    timeout queue           1m
+    timeout connect         10s
+    timeout client          1m
+    timeout server          1m
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 3000
+
+frontend tomcat_app_frontend
+   bind *:80
+   stats uri /haproxy?stats
+   default_backend tomcat_app_backend
+
+backend tomcat_app_backend
+   balance roundrobin
+   server app1 app1.sandbox.io:80 check
+   server app2 app2.sandbox.io:80 checkv
+</code></pre>
+<p>Open port 80/tcp on firewalld</p>
+<pre><code>- name: open firewalld port 80
+  firewalld:
+    service: http
+    state: enabled
+    permanent: true
+    immediate: true
+</code></pre>
+<p>Start haproxy service</p>
+<pre><code>- name: start load balancing
+  service:
+    name: haproxy
+    state: started
+    enabled: true
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../mail/" class="btn btn-neutral float-right" title="Mail">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../backup/" class="btn btn-neutral" title="Backup"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../backup/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../mail/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

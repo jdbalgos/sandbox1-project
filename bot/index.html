@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="canonical" href="http://docs.sandbox.io/bot/">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Automation - Deve Linux Sandbox Project</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Automation";
+    var mkdocs_page_input_path = "bot.md";
+    var mkdocs_page_url = "/bot/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Deve Linux Sandbox Project</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../gateway/">DNS and DHCP</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../spacewalk/">Spacewalk</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../freeipa/">FreeIPA</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Automation</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#dhcp-and-dns-entries">DHCP and DNS Entries</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#initial-phase">Initial Phase</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#vimrc-file">vimrc file</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#firewall">Firewall</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#puppet-server">Puppet Server</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#installation-and-setup">Installation and setup</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#other-configurations">Other Configurations</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#ansible">Ansible</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#ansible-pull">Ansible Pull</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../storage/">Storage</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../backup/">Backup</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../app/">Application</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../mail/">Mail</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../others/">Others</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Deve Linux Sandbox Project</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Automation</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="automation-server">Automation Server</h1>
+<p>The Servers FQDN will be bot.sandbox.io, for this one i dont want to lenghten all of my servers FQDN.</p>
+<h2 id="dhcp-and-dns-entries">DHCP and DNS Entries</h2>
+<p>Forward lookup zone</p>
+<pre><code>@           IN  NS  bot.sandbox.io.
+bot         IN  A   10.11.100.105
+</code></pre>
+<p>Reverse lookup zone</p>
+<pre><code>@           IN  NS  bot.sandbox.io.
+bot         IN  A   10.11.100.105
+105         IN  PTR bot.sandbox.io.
+</code></pre>
+<p>DHCP entry</p>
+<pre><code>host bot {
+    hardware ethernet 9A:5D:A5:C2:A3:25;
+    fixed-address 10.11.100.105;
+}
+</code></pre>
+<h2 id="initial-phase">Initial Phase</h2>
+<h3 id="vimrc-file">vimrc file</h3>
+<p>setup .vimrc on the root account and copy the file to /etc/skel so all accounts created moving forward has the same configuration, this would be helpful as we would use ansible later</p>
+<pre><code>set tabstop=4
+set shiftwidth=4
+set expandtab
+set number
+set smarttab
+set autoindent
+</code></pre>
+<h3 id="firewall">Firewall</h3>
+<p>Ensure firewall port(8140) for puppet server is open. </p>
+<p><code>firewall-cmd --add-port=8140/tcp &amp;&amp; firewall-cmd --runtime-to-permanent</code></p>
+<h2 id="puppet-server">Puppet Server</h2>
+<h3 id="installation-and-setup">Installation and setup</h3>
+<p>The Puppet server version would be puppet 7, this is why i downloaded the repository on the main website of puppet server and installed it to spacewalk. Note that the package i want to download is puppetserver instead of puppet-server, there is a puppet-server package lurking in EPEL repository and</p>
+<p><code>yum install -y puppetserver</code></p>
+<p>Once installed, edit /etc/sysconfig/puppetserver <code>JAVA_ARGS</code> option and change it according to your reference, i setup my puppet server to use only 512mb of my memory resources</p>
+<pre><code>[root@bot ~]# cat /etc/sysconfig/puppetserver | grep ^JAVA_ARGS=
+JAVA_ARGS="-Xms512m -Xmx512m -Djruby.logger.class=com.puppetlabs.jruby_utils.jruby.Slf4jLogger"
+[root@bot ~]# ps -o uname,rss,pmem,comm -u puppet
+USER       RSS %MEM COMMAND
+puppet   610592 60.1 java
+</code></pre>
+<p>Puppet autosign feature will make easier configuration when spawning a new VM, it will automatically attach to the puppet server and will not make authentication procedure, and thus making it unsecure. Since this is a development project and in a controlled network, i have enabled it.</p>
+<p><code>echo '*.sandbox.io' &gt; /etc/puppetlabs/puppet/autosign.conf</code></p>
+<p>The working directory for you to setup configuration files is <strong>/etc/puppetlabs/code/environments/production</strong>. Create and edit <strong>site.pp</strong> file in <strong>manifests</strong> directory.</p>
+<pre><code># manifests/site.pp
+node default {
+    include base
+}
+# This configuration will apply to all host connecting bot.sandbox.io
+</code></pre>
+<p>Create directory in <strong>modules</strong> directory named <strong>base</strong> with a subdirectory called manifests. create <em>init.pp</em> file and that would be the main configuration file for every hosts that will connect to the puppet server</p>
+<pre><code># modules/base/manifests/init.pp
+class base {
+    file {
+        '/etc/yum.repos.d' :
+         ensure =&gt; directory,
+         recurse =&gt; true,
+         purge =&gt; true
+    }
+    package {
+    [git, ansible, policycoreutils-python, setroubleshoot-server, ipa-client, firewalld]:
+        require =&gt; File['/etc/yum.repos.d'],
+        ensure =&gt; present
+    }
+}
+# Will remove repo files, and install necessary packages
+</code></pre>
+<p>If the server has puppet-agent installed, you can type the following:</p>
+<p><code>puppet config set server bot.sandbox.io --section main</code></p>
+<p><code>puppet agent --test</code></p>
+<p>The output should look like this</p>
+<pre><code>Info: Creating a new RSA SSL key for dev1.sandbox.io
+Info: csr_attributes file loading from /etc/puppetlabs/puppet/csr_attributes.yaml
+Info: Creating a new SSL certificate request for dev1.sandbox.io
+Info: Certificate Request fingerprint (SHA256): 1D:D9:11:63:35:D8:00:26:EE:C0:11:E5:6D:B7:9B:CD:97:7E:44:B4:DA:59:FC:46:41:BC:54:AB:91:3A:5E:F3
+Info: Downloaded certificate for dev1.sandbox.io from https://bot.sandbox.io:8140/puppet-ca/v1
+Info: Using configured environment 'production'
+Info: Retrieving pluginfacts
+Info: Retrieving plugin
+Info: Caching catalog for dev1.sandbox.io
+Info: Applying configuration version '1629663815'
+Notice: /Stage[main]/Base/File[/etc/yum.repos.d/CentOS-Base.repo]/ensure: removed
+Notice: /Stage[main]/Base/File[/etc/yum.repos.d/CentOS-CR.repo]/ensure: removed
+Notice: /Stage[main]/Base/File[/etc/yum.repos.d/CentOS-Debuginfo.repo]/ensure: removed
+Notice: /Stage[main]/Base/File[/etc/yum.repos.d/CentOS-Media.repo]/ensure: removed
+Notice: /Stage[main]/Base/File[/etc/yum.repos.d/CentOS-Sources.repo]/ensure: removed
+Notice: /Stage[main]/Base/File[/etc/yum.repos.d/CentOS-Vault.repo]/ensure: removed
+Notice: /Stage[main]/Base/File[/etc/yum.repos.d/CentOS-fasttrack.repo]/ensure: removed
+Notice: /Stage[main]/Base/File[/etc/yum.repos.d/CentOS-x86_64-kernel.repo]/ensure: removed
+Notice: /Stage[main]/Base/Package[git]/ensure: created
+Notice: /Stage[main]/Base/Package[ansible]/ensure: created
+Notice: /Stage[main]/Base/Package[policycoreutils-python]/ensure: created
+Notice: /Stage[main]/Base/Package[setroubleshoot-server]/ensure: created
+Notice: /Stage[main]/Base/Package[ipa-client]/ensure: created
+Info: Creating state file /opt/puppetlabs/puppet/cache/state/state.yaml
+Notice: Applied catalog in 312.49 seconds
+</code></pre>
+<p>We can move forward on adding additional configurations on the base/init.pp file</p>
+<h3 id="other-configurations">Other Configurations</h3>
+<p>ive added config.pp file in modules/base/manifests directory to put all my variables and not crowding the init.pp file, need it to be declared in init.pp file</p>
+<pre><code>include base::config
+include base::secret
+</code></pre>
+<p>Run and enable FirewallD service</p>
+<pre><code>service {
+    'firewalld':
+    ensure =&gt; running,
+    enable =&gt; true,
+    require =&gt; Package['firewalld']
+}
+</code></pre>
+<p>Add public key for easy access on root account</p>
+<pre><code>file {
+  '/root/.ssh':
+    ensure =&gt; directory,
+    owner =&gt; 0,
+    group =&gt; 0,
+    mode =&gt; '700'
+}
+file {
+  '/root/.ssh/authorized_keys':
+    ensure =&gt; file,
+    owner =&gt; 0,
+    group =&gt; 0,
+    mode =&gt; '600',
+    content =&gt; $::base::config::root_pub_key,
+    require =&gt; File['/root/.ssh']
+}
+</code></pre>
+<p>Pre configured vimrc setup will be installed in root and skel directory</p>
+<pre><code>file {
+  ['/etc/skel/.vimrc', '/root/.vimrc']:
+    ensure =&gt; file,
+    content =&gt; $::base::config::vim_rc
+}
+</code></pre>
+<p>Remove 'rhgb quiet' options in /etc/default/grub file, this is to view errors arising upon bootup.</p>
+<pre><code>exec {
+  'remove rhgb and quiet':
+    command =&gt; "sed -i 's/ rhgb quiet//g' /etc/default/grub &amp;&amp; grub2-mkconfig -o /boot/grub2/grub.cfg",
+    path =&gt; '/usr/bin:/usr/sbin',
+    onlyif =&gt; "grep ' rhgb quiet' /etc/default/grub"
+}
+</code></pre>
+<p>Disable root password authentication and use public key</p>
+<pre><code>exec {
+  'disable root password auth':
+    command =&gt; 'sed -i "s/#PermitRootLogin yes/PermitRootLogin without-password/" /etc/ssh/sshd_config',
+    path =&gt; '/usr/bin:/usr/sbin',
+    onlyif =&gt; 'grep "#PermitRootLogin" /etc/ssh/sshd_config',
+    notify =&gt; Service['sshd']
+}
+# SSH daemon restart placeholder for ssh to restart once /etc/ssh/sshd_config has been change.
+service {
+  'sshd':
+    ensure=&gt; running
+}
+</code></pre>
+<p>Connect to FreeIPA Server</p>
+<pre><code>exec {
+  'execute ipa-client-install':
+    command =&gt; "ipa-client-install -U -p '${::base::secret::ipa_user}' -w '${::base::secret::ipa_pass}' --domain=sandbox.io --server=directory1.sandbox.io --mkhomedir",
+    path =&gt; '/usr/bin:/usr/sbin',
+    unless =&gt; "grep 'URI ldaps://directory1.sandbox.io' /etc/openldap/ldap.conf 2&gt;/dev/null",
+    require =&gt; Package['ipa-client']
+}
+</code></pre>
+<p>Create home directory of bot-acc for ansible</p>
+<pre><code>file {
+  '/home/users':
+    ensure =&gt; directory,
+    mode =&gt; '755'
+}
+file {
+  'bot-acc setup1':
+    path =&gt; '/home/users/bot-acc',
+    ensure =&gt; directory,
+    source =&gt; '/etc/skel',
+    recurse =&gt; true,
+    mode =&gt; '600',
+    owner =&gt; '779800006',
+    group =&gt; '779800006',
+    require =&gt; [ File['/home/users'] , Exec['execute ipa-client-install'] ]
+}
+</code></pre>
+<p>Create local account so server is still accessible if cannot be access root via ssh</p>
+<pre><code>user {
+  'user-account':
+    ensure =&gt; present,
+    name =&gt; $::base::secret::sys_user,
+    password =&gt; $::base::secret::sys_passwd,
+    managehome =&gt; true
+}
+</code></pre>
+<p>Create ssh dir for bot-acc account, copy the files under modules/base/files/ansible_ssh/ directory</p>
+<pre><code>file {
+  'bot-acc sshdir':
+    ensure =&gt; directory,
+    path =&gt; '/home/users/bot-acc/.ssh',
+    mode =&gt; '600',
+    owner =&gt; '779800006',
+    group =&gt; '779800006',
+    recurse =&gt; true,
+    source =&gt; 'puppet:///modules/base/ansible_ssh',
+    require =&gt; File['bot-acc setup1']
+}
+</code></pre>
+<p>Create .system-checks directory in /home/users/bot-acc, this will act as directory of files for the system to check prior to their execution</p>
+<pre><code> file {
+  'bot-acc system_checks directory':
+    ensure =&gt; directory,
+    path =&gt; '/home/users/bot-acc/.system-checks',
+    mode =&gt; '600',
+    owner =&gt; '779800006',
+    group =&gt; '779800006',
+    require =&gt; Exec['copy /etc/skel to bot-acc']
+}
+</code></pre>
+<p>ansible_ssh files</p>
+<pre><code>[root@bot production]# ll modules/base/files/ansible_ssh/
+total 12
+-rw-r--r--. 1 root root  381 Sep  4 14:29 authorized_keys
+-rw-r--r--. 1 root root  106 Sep  4 21:00 config
+-rw-r--r--. 1 root root 1675 Sep  4 23:42 id_rsa_ansible
+</code></pre>
+<p>Set ansible password .ansible_pass file </p>
+<pre><code>file {
+  'ansible_pass':
+    ensure =&gt; file,
+    path =&gt; '/home/users/bot-acc/.ansible_pass',
+    mode =&gt; '600',
+    owner =&gt; '779800006',
+    group =&gt; '779800006',
+    content =&gt; $::base::secret::ansible_pass
+}
+</code></pre>
+<p>Setup sudoers file for freeipa groups</p>
+<pre><code>file {
+  'sudoers for ipa':
+    ensure =&gt; file,
+    path =&gt; '/etc/sudoers.d/ipa',
+    mode =&gt; '600',
+    source =&gt; 'puppet:///modules/base/ipa_sudoers'
+}
+</code></pre>
+<p>Current <code>modules/base/files/ipa_sudoers</code> contents</p>
+<pre><code>%bot_admin ALL=(ALL) NOPASSWD: ALL
+</code></pre>
+<p>Setup service file for ansible pull </p>
+<pre><code>file {
+  'ansible_service file':
+  ensure =&gt; file,
+  path =&gt; '/etc/systemd/system/ansible-config.service',
+  mode =&gt; '644',
+  source =&gt; 'puppet:///modules/base/ansible_service/ansible-config.service'
+}
+</code></pre>
+<p>ansible-config.service contents</p>
+<pre><code>[Unit]
+Description=Run ansible-pull at first boot to apply environment configuration
+After=sssd.service
+
+[Service]
+ExecStart=/root/ansible-config.sh
+Type=oneshot
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>Setup shell command ansible-command.sh</p>
+<pre><code>file {
+  'ansible_pull command':
+    ensure =&gt; file,
+    path =&gt; '/root/ansible-config.sh',
+    mode =&gt; '755',
+    source =&gt; 'puppet:///modules/base/ansible_service/ansible-command.sh'
+}
+</code></pre>
+<p>ansible-command.sh contents</p>
+<pre><code>#!/bin/bash
+echo `date` &gt; /home/users/bot-acc/bot-output.txt
+chmod 666 /home/users/bot-acc/bot-output.txt
+/opt/puppetlabs/bin/puppet agent --test | tee -a /home/users/bot-acc/bot-output.txt
+/usr/sbin/runuser -l bot-acc -c 'ansible-pull -U ansible:[redacted] -i inventory --accept-host-key --vault-password-file=~/.ansible_pass' | tee /root/ansible-output.txt
+</code></pre>
+<p>In order to run puppet upon bootup, i will add it to kickstart file of spacewalk</p>
+<pre><code>/opt/puppetlabs/bin/puppet config set server bot.sandbox.io --section main
+/opt/puppetlabs/bin/puppet agent --test | tee /root/puppet-log.txt
+</code></pre>
+<h2 id="ansible">Ansible</h2>
+<p>Ansible package is already installed via PuppetServer</p>
+<h3 id="ansible-pull">Ansible Pull</h3>
+<p>After creating the service for ansible to work, we are now on the setting up ansible for ansible pull</p>
+<pre><code>[root@bot ansible_pull]# tree -L 2
+.
+├── ansible.cfg
+├── configs
+│   ├── postconfig.yml
+│   └── preconfig.yml
+├── files
+│   ├── gpg_keys
+│   └── dev
+├── inventory
+├── local.yml
+└── nodes
+    └── dev-setup.yml
+</code></pre>
+<p><code>local.yml</code> file will serve as our main file that will route configurations based on the hostname of the servers</p>
+<pre><code># Example local.yml file
+---
+- hosts: localhost
+  tasks:
+  - name: run pre install setup
+    include: configs/preconfig.yml
+  - name: run setup for storage server
+    include: nodes/dev-setup.yml
+    when: ansible_hostname == "dev"
+  - name: run post install setup
+    include: configs/postconfig.yml
+...
+</code></pre>
+<p><code>inventory</code> file will need all the hostnames of the servers that will sync on local.yml</p>
+<pre><code>docs.sandbox.io
+dev.sandbox.io
+</code></pre>
+<p><code>ansible.cfg</code> will be our configuration setup for ansible-pull, <code>host_key_checking = False</code> will ignore StrictHostKeyChecking of the server. <code>display_skipped_hosts = False</code> will disable displaying of skipped tasks. other configurations are for privesc.</p>
+<pre><code>[defaults]
+host_key_checking = False
+display_skipped_hosts = False
+
+[privilege_escalation]
+become = True
+become_method = sudo
+become_user = root
+become_ask_pass = False
+</code></pre>
+<p><code>preconfig.yml</code> and <code>postconfig.yml</code> in <code>config</code> directory will act as a base configuration for ansible. installing necessary things first before node configurations, and cleanup after. </p>
+<pre><code># Example preconfig.yml file
+- name: make sure base GPG keys are installed
+  rpm_key:
+    key: '{{item}}'
+    state: present
+  with_items:
+    - 'files/gpg_keys/centos7/centos-base-gpg'
+    - 'files/gpg_keys/centos7/centos-epel-gpg'
+    - 'files/gpg_keys/centos7/puppet-release-1-gpg'
+    - 'files/gpg_keys/centos7/puppet-release-2-gpg'
+    - 'files/gpg_keys/centos7/spacewalk-base-gpg'
+    - 'files/gpg_keys/centos7/spacewalk-java-gpg'
+</code></pre>
+<p>In order for ansible pull to work, we need to configure the directory to use git. </p>
+<pre><code>git init
+git add -A
+git commit -m "initial commit"
+</code></pre>
+<p>ansible-command.sh already configured the ansible-pull command.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../storage/" class="btn btn-neutral float-right" title="Storage">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../freeipa/" class="btn btn-neutral" title="FreeIPA"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../freeipa/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../storage/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

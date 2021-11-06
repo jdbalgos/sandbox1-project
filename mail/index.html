@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="canonical" href="http://docs.sandbox.io/mail/">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Mail - Deve Linux Sandbox Project</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Mail";
+    var mkdocs_page_input_path = "mail.md";
+    var mkdocs_page_url = "/mail/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Deve Linux Sandbox Project</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../gateway/">DNS and DHCP</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../spacewalk/">Spacewalk</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../freeipa/">FreeIPA</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../bot/">Automation</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../storage/">Storage</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../backup/">Backup</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../app/">Application</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Mail</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#dhcp-and-dns-entries">DHCP and DNS Entries</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#installation-and-setup">Installation and Setup</a>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../others/">Others</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Deve Linux Sandbox Project</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Mail</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="mail-server">Mail Server</h1>
+<p>Design of the mail server is to gather all emails on the sandbox infastructure, once enough emails are gathered the emails will will be forwarded to my email</p>
+<h2 id="dhcp-and-dns-entries">DHCP and DNS Entries</h2>
+<p>Forward lookup zone</p>
+<pre><code> @           IN  NS  mail.sandbox.io.
+ mail        IN  A   10.11.100.111
+ sandbox.io. IN  MX  111 mail
+</code></pre>
+<p>The MX record will forward all emails that is pointed to @sandbox.io to mail.sandbox.io</p>
+<p>Reverse lookup zone</p>
+<pre><code>@           IN  NS  mail.sandbox.io.
+mail        IN  A   10.11.100.111
+111         IN  PTR mail.sandbox.io.
+</code></pre>
+<p>DHCP entry</p>
+<pre><code>host mail {
+    hardware ethernet 02:AE:24:24:B7:7A;
+    fixed-address 10.11.100.111;
+}
+</code></pre>
+<h2 id="installation-and-setup">Installation and Setup</h2>
+<p>Install postfix, mailx, cyrus-sasl-plain packages</p>
+<pre><code>- name: install postfix and other packages
+  yum:
+    name:
+      - postfix
+      - mailx
+      - cyrus-sasl-plain
+    state: present
+</code></pre>
+<p>Open smtp port on the firewall</p>
+<pre><code>- name: open smtp port 25 to firewalld
+  firewalld:
+    service: smtp
+    immediate: true
+    permanent: true
+    state: enabled
+</code></pre>
+<p>We need to change interface on postfix configuration file as we need the server to listen on its IP address to gather emails</p>
+<ul>
+<li>name: change inet_interface configuration on /etc/postfix/main.cf
+  lineinfile:
+    path: /etc/postfix/main.cf
+    regexp: "^inet_interfaces"
+    line: "inet_interfaces = {{ ansible_fqdn }}"
+  register: interfaces_reg</li>
+</ul>
+<p>Append configuration settings on postfix main.cf file</p>
+<pre><code>- name: append block of file on end of main.cf
+  blockinfile:
+    path: /etc/postfix/main.cf
+    block: |
+      myhostname = sandbox.io
+      relayhost = [smtp.gmail.com]:587
+      smtp_use_tls = yes
+      smtp_sasl_auth_enable = yes
+      smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+      smtp_tls_CAfile = /etc/ssl/certs/ca-bundle.crt
+      smtp_sasl_security_options = noanonymous
+      smtp_sasl_tls_security_options = noanonymous
+</code></pre>
+<p>Create sasl_passwd to /etc/postfix directory, this will contain your gmail username and password so apply security if possible</p>
+<pre><code>- name: copy sasl_passwd to /etc/postfix
+  copy:
+    src: files/mail/sasl_passwd
+    dest: /etc/postfix/sasl_passwd
+</code></pre>
+<p>Contents:</p>
+<pre><code>[root@mail ~]# cat /etc/postfix/sasl_passwd
+[smtp.gmail.com]:587 [username]:[password]
+</code></pre>
+<p>With sasl_passwd created, we can execute postmap binary to produce sasl db</p>
+<pre><code>- name: execute shell command if sasl_db is does not exist
+  shell:
+    cmd: postmap /etc/postfix/sasl_passwd
+  when: not sasl_db.stat.exists
+</code></pre>
+<p>Restart the postfix server and enable it</p>
+<pre><code>- name: start postfix
+  service:
+    name: postfix
+    state: restarted
+    enabled: true
+</code></pre>
+<p>copy the file send_mail.sh to /root, it will be the shell to run every 10 minutes to check if there is enough emails to forward to my gmail account</p>
+<pre><code>- name: copy files/mail/send_mail.sh to /root
+  copy:
+    src: files/mail/send_mail.sh
+    dest: /root/send_mail.sh
+    mode: '0755'
+</code></pre>
+<p>Contents of send_mail.sh</p>
+<pre><code>#!/bin/bash
+
+if ! [ -e /var/spool/mail/root ] ; then
+    logger 'root mail does not exist'
+    exit
+fi
+
+if [ -v $1 ] ; then
+    echo './send_mail.sh $1'
+    exit
+fi
+
+MAIL_COUNT=`grep "^Subject:" /var/spool/mail/root | wc -l`
+DATE_ATTACH=`date +%s`
+EMAIL=$1
+
+if [ $MAIL_COUNT -ge 5 ]; then
+    cat /var/spool/mail/root | sed -e '/^From /,+8d' | sed -e '/^User-Agent/,+4d' &gt; /tmp/mail_body
+    printf '\n\n-------------------------\nSee attachment for full details'&gt;&gt; /tmp/mail_body
+    cp /var/spool/mail/root /tmp/mail_attachment_$DATE_ATTACH
+    mail -a /tmp/mail_attachment_$DATE_ATTACH -s "All mails on `hostname -f`: `date "+%m-%d-%Y %I:%M %p"`" $EMAIL &lt; /tmp/mail_body
+    if [ $? -eq 0 ]; then
+        logger 'MAILER: Email sent'
+        logger 'MAILER: Deleting mail logs'
+        echo -n '' &gt; /var/spool/mail/root
+        logger 'MAILER: Deleting temporary files'
+        rm -rf /tmp/mail_attachment_$DATE_ATTACH
+        rm -rf /tmp/mail_body
+    else
+        logger 'MAILER: Email not sent'
+    fi
+else
+    logger 'MAILER: Not enough mails, skipping...'
+fi
+</code></pre>
+<p>Create cron job for send_mail.sh </p>
+<pre><code>- name: create cron job for send_mail.sh
+  copy:
+    src: files/mail/cron_mailer
+    dest: /etc/cron.d/mailer
+</code></pre>
+<p>Contents of mailer cronjob</p>
+<pre><code>*/10 * * * * root /root/send_mail.sh [email_address]
+</code></pre>
+<p>Email from the mail server should look like below</p>
+<p><a href="../assets/images/mail/mail-image1.jpg"><img alt="" src="../assets/images/mail/mail-image1.jpg" /></a></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../others/" class="btn btn-neutral float-right" title="Others">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../app/" class="btn btn-neutral" title="Application"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../app/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../others/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

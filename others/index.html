@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="canonical" href="http://docs.sandbox.io/others/">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Others - Deve Linux Sandbox Project</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Others";
+    var mkdocs_page_input_path = "others.md";
+    var mkdocs_page_url = "/others/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Deve Linux Sandbox Project</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../gateway/">DNS and DHCP</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../spacewalk/">Spacewalk</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../freeipa/">FreeIPA</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../bot/">Automation</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../storage/">Storage</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../backup/">Backup</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../app/">Application</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../mail/">Mail</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Others</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#self-signed-certificate-setup-for-https-access-on-webservers">Self signed certificate setup for HTTPS access on webservers</a>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Deve Linux Sandbox Project</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Others</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="other-activities">Other activities</h1>
+<h2 id="self-signed-certificate-setup-for-https-access-on-webservers">Self signed certificate setup for HTTPS access on webservers</h2>
+<p>Create keys for self signed certificate</p>
+<p><code>openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/pki/tls/private/docs.key -out /etc/pki/tls/certs/docs.crt</code></p>
+<pre><code>[root@docs ~]# openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/pki/tls/private/docs.key -out /etc/pki/tls/certs/docs.crt
+Generating a 2048 bit RSA private key
+.........................................................................+++
+..................+++
+writing new private key to '/etc/pki/tls/private/docs.key'
+-----
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [XX]:[redacted]
+State or Province Name (full name) []:[redacted]
+Locality Name (eg, city) [Default City]:[redacted]
+Organization Name (eg, company) [Default Company Ltd]:Sandbox
+Organizational Unit Name (eg, section) []:IT
+Common Name (eg, your name or your server hostname) []:docs.sandbox.io
+Email Address []:web@sandbox.io
+</code></pre>
+<p>Install mod_ssl, this will add ssl.conf in /etc/httpd/conf.d/ directory. </p>
+<p><code>yum install -y mod_ssl</code></p>
+<p>Edit /etc/httpd/conf.d/ssl.conf, Create a virtual host entry that redirects http(port 80) access to https(port 443)</p>
+<p><code>vim /etc/httpd/conf.d/ssl.conf</code></p>
+<pre><code>&lt;VirtualHost _default_:80&gt;
+ServerName docs.sandbox.io:80
+ServerAlias docs.sandbox.io
+Redirect permanent / https://docs.sandbox.io/
+&lt;/VirtualHost&gt;
+</code></pre>
+<p>If virtual host for port 443 is not there, create it.</p>
+<pre><code>&lt;VirtualHost _default_:443&gt;
+DocumentRoot "/var/www/sandbox/site"
+ServerName docs.sandbox.io:443
+ErrorLog logs/ssl_error_log
+TransferLog logs/ssl_access_log
+LogLevel warn
+SSLEngine on
+SSLProtocol all -SSLv2 -SSLv3
+SSLCipherSuite HIGH:3DES:!aNULL:!MD5:!SEED:!IDEA
+SSLCertificateFile /etc/pki/tls/certs/docs.crt
+SSLCertificateKeyFile /etc/pki/tls/private/docs.key
+&lt;Files ~ "\.(cgi|shtml|phtml|php3?)$"&gt;
+    SSLOptions +StdEnvVars
+&lt;/Files&gt;
+&lt;Directory "/var/www/cgi-bin"&gt;
+    SSLOptions +StdEnvVars
+&lt;/Directory&gt;
+BrowserMatch "MSIE [2-5]" \
+         nokeepalive ssl-unclean-shutdown \
+         downgrade-1.0 force-response-1.0
+CustomLog logs/ssl_request_log \
+          "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
+&lt;/VirtualHost&gt;
+</code></pre>
+<p>Make sure to replace <code>SSLCertificateFile</code> and <code>SSLCertificateKeyFile</code> in the section below of the configuration file</p>
+<pre><code>SSLCertificateFile /etc/pki/tls/certs/docs.crt
+SSLCertificateKeyFile /etc/pki/tls/private/docs.key
+</code></pre>
+<p>Restart httpd service</p>
+<pre><code>[root@docs ~]# systemctl status httpd | head
+● httpd.service - The Apache HTTP Server
+   Loaded: loaded (/usr/lib/systemd/system/httpd.service; enabled; vendor preset: disabled)
+   Active: active (running) since Fri 2021-10-29 03:28:39 PST; 15s ago
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../mail/" class="btn btn-neutral" title="Mail"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../mail/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

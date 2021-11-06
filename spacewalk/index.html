@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="canonical" href="http://docs.sandbox.io/spacewalk/">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Spacewalk - Deve Linux Sandbox Project</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Spacewalk";
+    var mkdocs_page_input_path = "spacewalk.md";
+    var mkdocs_page_url = "/spacewalk/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Deve Linux Sandbox Project</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../gateway/">DNS and DHCP</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Spacewalk</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#dhcp-and-dns-entries">DHCP and DNS Entries</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#additional-repos-packages">Additional repos &amp; packages</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#database-server">Database server</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#installing-spacewalk">Installing Spacewalk</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#configuring-the-firewall">Configuring the Firewall</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#configuring-spacewalk">Configuring Spacewalk</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#creating-spacewalk-centos-channel">Creating Spacewalk CentOS channel</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#creating-software-channel">Creating software channel</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#creating-repositories">Creating repositories</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#syncing-the-channel-and-the-repos">Syncing the channel and the repos</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#creating-base-children-channels">Creating Base Children Channels</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#creating-updates-channel">Creating Updates Channel</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#creating-epel-channel">Creating EPEL Channel</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#creating-spacewalk-client-channel">Creating Spacewalk Client Channel</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#creating-extras-channel">Creating Extras Channel</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#creating-puppet-channel">Creating Puppet Channel</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#creating-repositories-for-children-channels">Creating Repositories for Children Channels</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pushing-packages-to-spacewalk-repo">Pushing packages to spacewalk repo</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#distribution-and-kickstart-profile">Distribution and Kickstart Profile</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#creating-distributions">Creating Distributions</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#create-activation-key">Create Activation Key</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#creating-kickstart-profile">Creating Kickstart Profile</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#setting-up-errata-pxe-configuration-etc">Setting up Errata, PXE configuration, Etc.</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#errata-importation">Errata Importation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pxe-configuration">PXE Configuration</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#gpg-public-keys-and-ssl-certificates">GPG Public Keys and SSL Certificates</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../freeipa/">FreeIPA</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../bot/">Automation</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../storage/">Storage</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../backup/">Backup</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../app/">Application</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../mail/">Mail</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../others/">Others</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Deve Linux Sandbox Project</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Spacewalk</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="spacewalk-documentation">Spacewalk documentation</h1>
+<h2 id="dhcp-and-dns-entries">DHCP and DNS Entries</h2>
+<p>Forward lookup zone</p>
+<pre><code>@                   IN  NS      spacewalk.sandbox.io.
+spacewalk           IN  A       10.11.100.101
+</code></pre>
+<p>Reverse lookup zone    </p>
+<pre><code>@                   IN  NS      spacewalk.sandbox.io.
+spacewalk           IN  A       10.11.100.101
+101                 IN  PTR     spacewalk.sandbox.io.
+</code></pre>
+<p>DHCP entry</p>
+<pre><code>host spacewalk {
+        hardware ethernet 3E:D1:95:C2:49:9C;
+        fixed-address 10.11.100.101;
+}
+</code></pre>
+<h2 id="installation">Installation</h2>
+<p>Source installation instructions is found <a href="https://github.com/spacewalkproject/spacewalk/wiki/HowToInstall">here</a>, documenting for my own copy.</p>
+<h3 id="prerequisites">Prerequisites</h3>
+<ul>
+<li>Outbound open ports 80, 443</li>
+<li>Inbound open ports 80, 443, 5222 (only if you want to push actions to client machines) and 5269 (only for push actions to a Spacewalk Proxy), 69 udp if you want to use tftp</li>
+<li>Storage for database: 250 KiB per client system + 500 KiB per channel + 230 KiB per package in channel (i.e. 1.1GiB for channel with 5000 packages)</li>
+<li>Storage for packages (default /var/satellite): Depends on what you are storing; Red Hat recommend 6GB per channel for their channels</li>
+<li>2GB RAM minimum, 4GB recommended</li>
+<li>Make sure your underlying OS is fully up-to-date.</li>
+<li>If you use LDAP as a central identity service and wish to pull user and group information from it, see <a href="https://github.com/spacewalkproject/spacewalk/wiki/SpacewalkWithLDAP">SpacewalkWithLDAP</a></li>
+</ul>
+<h3 id="additional-repos-packages">Additional repos &amp; packages</h3>
+<p>All other dependecies outside base repo will be available on EPEL repository </p>
+<pre><code>rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+</code></pre>
+<h3 id="database-server">Database server</h3>
+<p>I will let spacewalk setup postgresql database first, before moving it to a separate server.</p>
+<pre><code>yum -y install spacewalk-setup-postgresql
+</code></pre>
+<h3 id="installing-spacewalk">Installing Spacewalk</h3>
+<pre><code>yum -y install spacewalk-postgresql
+</code></pre>
+<h3 id="configuring-the-firewall">Configuring the Firewall</h3>
+<p>Firewalld is installed on my server so the commands i will use is based on firewalld commands</p>
+<pre><code>firewall-cmd --add-service=http
+firewall-cmd --add-service=https
+firewall-cmd --runtime-to-perm
+</code></pre>
+<h3 id="configuring-spacewalk">Configuring Spacewalk</h3>
+<p>Please make sure that your spacewalk server have a resolvable FQDN.</p>
+<pre><code>spacewalk-setup
+</code></pre>
+<p>An example session is as follows:</p>
+<pre><code>[root@spacewalk ~]# spacewalk-setup
+* Setting up SELinux..
+** Database: Setting up database connection for PostgreSQL backend.
+** Database: Installing the database:
+** Database: This is a long process that is logged in:
+** Database:   /var/log/rhn/install_db.log
+*** Progress: #
+** Database: Installation complete.
+** Database: Populating database.
+*** Progress: ############################
+* Configuring tomcat.
+* Setting up users and groups.
+** GPG: Initializing GPG and importing key.
+** GPG: Creating /root/.gnupg directory
+You must enter an email address.
+Admin Email Address? [redacted]
+* Performing initial configuration.
+** Package installation: Locking required rpm versions.
+* Configuring apache SSL virtual host.
+Should setup configure apaches default ssl server for you (saves original ssl.conf) [Y]?
+** /etc/httpd/conf.d/ssl.conf has been backed up to ssl.conf-swsave
+* Configuring jabberd.
+* Creating SSL certificates.
+CA certificate password? password
+Re-enter CA certificate password? password
+Cname alias of the machine (comma seperated)? spacewalk.sandbox.io
+Organization? sandbox
+Organization Unit [spacewalk.sandbox.io]?
+Email Address [[redacted]]?
+City? [redacted]
+State? [redacted]
+Country code (Examples: "US", "JP", "IN", or type "?" to see a list)? [redacted]
+** SSL: Generating CA certificate.
+** SSL: Deploying CA certificate.
+** SSL: Generating server certificate.
+** SSL: Storing SSL certificates.
+* Deploying configuration files.
+* Update configuration in database.
+* Setting up Cobbler..
+Cobbler requires tftp and xinetd services be turned on for PXE provisioning functionality. Enable these services [Y]? y
+* Restarting services.
+Installation complete.
+Visit https://spacewalk.sandbox.io to create the Spacewalk administrator account.
+</code></pre>
+<h2 id="creating-spacewalk-centos-channel">Creating Spacewalk CentOS channel</h2>
+<h3 id="creating-software-channel">Creating software channel</h3>
+<p>Channels -&gt; Manage Software Channels -&gt; Create Channel</p>
+<p><a href="../assets/images/spacewalk/spacewalk-image1.png"><img alt="" src="../assets/images/spacewalk/spacewalk-image1.png" /></a> </p>
+<p>Fill up the fields accordingly:</p>
+<pre><code>Channel Name: Centos 7 Base - x86_64
+Channel Label: centos7-base-x86_64
+Architecture: x86_64
+Yum Repository Checksum Type: sha1
+Channel Summary: Centos 7 Base - x86_64
+</code></pre>
+<p><a href="../assets/images/spacewalk/spacewalk-image2.png"><img alt="" src="../assets/images/spacewalk/spacewalk-image2.png" /></a> </p>
+<p>Optional: For additional security, add GPG key fingerprint in Security:GPG section, you can get GPG key using <code>gpg --with-fingerprint [key]</code>.</p>
+<pre><code>cd /etc/pki/rpm-gpg/
+gpg --with-fingerprint RPM-GPG-KEY-CentOS-7
+pub  4096R/F4A80EB5 2014-06-23 CentOS-7 Key (CentOS 7 Official Signing Key) &lt;security@centos.org&gt;
+Key fingerprint = 6341 AB27 53D7 8A78 A7C2  7BB1 24C6 A8A7 F4A8 0EB5
+</code></pre>
+<p><a href="../assets/images/spacewalk/spacewalk-image3.png"><img alt="" src="../assets/images/spacewalk/spacewalk-image3.png" /></a></p>
+<h3 id="creating-repositories">Creating repositories</h3>
+<p>Channels -&gt; Manage Software Channels -&gt; Manage Repositories -&gt; Create Repository</p>
+<pre><code>Repository Label: centos7-base-x86_64
+Repository URL: http://mirror.centos.org/centos/7/os/x86_64/
+Repository Type: yum
+</code></pre>
+<p><a href="../assets/images/spacewalk/spacewalk-image4.png"><img alt="" src="../assets/images/spacewalk/spacewalk-image4.png" /></a></p>
+<h3 id="syncing-the-channel-and-the-repos">Syncing the channel and the repos</h3>
+<p>In the command line type:</p>
+<pre><code>spacewalk-repo-sync -c centos7-base-x86_64
+</code></pre>
+<h2 id="creating-base-children-channels">Creating Base Children Channels</h2>
+<h3 id="creating-updates-channel">Creating Updates Channel</h3>
+<p>Create a new channel again, now making the Base channel as the parent channel:</p>
+<pre><code>Channel Name: Centos 7 Updates - x86_64
+Channel Label: centos7-updates-x86_64
+Parent Channel: Centos 7 Base - x86_64
+Channel Summary: centos7-updates-x86_64
+</code></pre>
+<p><a href="../assets/images/spacewalk/spacewalk-image5.png"><img alt="" src="../assets/images/spacewalk/spacewalk-image5.png" /></a></p>
+<p>Security:GPG section in this channel is the same with the parent channel:</p>
+<pre><code>GPG key URL: http://mirror.centos.org/centos/7/os/x86_64/RPM-GPG-KEY-CentOS-7
+GPG key ID: F4A80EB5
+GPG key Fingerprint: 6341 AB27 53D78A78 A7C2 7BB1 24C6 A8A7 F4A8 0EB5
+</code></pre>
+<p>Click Create Channel to create the children channel</p>
+<h3 id="creating-epel-channel">Creating EPEL Channel</h3>
+<p>Same with Updates channel, make the base channel as parent channel:</p>
+<pre><code>Channel Name: Epel 7 - x86_64
+Channel Label: epel7-x86_64
+Parent Channel: Centos 7 Base - x86_64
+Channel Summary: Extra Packages for Enterprise Linux 7 - x86_64
+</code></pre>
+<p><a href="../assets/images/spacewalk/spacewalk-image6.png"><img alt="" src="../assets/images/spacewalk/spacewalk-image6.png" /></a></p>
+<p>As for the Security: GPG, change the details to:</p>
+<pre><code>GPG key URL: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
+GPG key ID: 352C64E5
+GPG key Fingerprint: 91E9 7D7C 4A5E 96F1 7F3E 888F 6A2F AEA2 352C 64E5
+</code></pre>
+<p>Alternatively, you can type <code>gpg --with-fingerprint /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7</code> to the terminal.</p>
+<p><a href="../assets/images/spacewalk/spacewalk-image7.png"><img alt="" src="../assets/images/spacewalk/spacewalk-image7.png" /></a></p>
+<h3 id="creating-spacewalk-client-channel">Creating Spacewalk Client Channel</h3>
+<p>Same with Updates and EPEL channel, make the base channel as parent channel:</p>
+<pre><code>Channel Name: Spacewalk Client 2.10 - x86_64
+Channel Label: spacewalk-client-210-x86_64
+Parent Channel: Centos 7 Base - x86_64
+Channel Summary: spacewalk-client-210-x86_64
+</code></pre>
+<p><a href="../assets/images/spacewalk/spacewalk-image8.png"><img alt="" src="../assets/images/spacewalk/spacewalk-image8.png" /></a></p>
+<p>As for the Security: GPG, change the details to:</p>
+<pre><code>GPG key URL: https://download.copr.fedorainfracloud.org/results/@spacewalkproject/spacewalk-2.10/pubkey.gpg
+GPG key ID: BC2E6843
+GPG key Fingerprint: E8C0 573E 5B62 BB7C 98C1 A2AC 770C E53E BC2E 6843
+</code></pre>
+<p><a href="../assets/images/spacewalk/spacewalk-image9.png"><img alt="" src="../assets/images/spacewalk/spacewalk-image9.png" /></a></p>
+<h3 id="creating-extras-channel">Creating Extras Channel</h3>
+<pre><code>Channel Name: Centos 7 Extras - x86_64
+Channel Label: centos-7-extras-x86_64
+Parent Channel: Centos 7 Base - x86_64
+Channel Summary: centos-7-extras-x86_64
+</code></pre>
+<h3 id="creating-puppet-channel">Creating Puppet Channel</h3>
+<p>This Channel is for the automation server, puppet-server package in EPEL is quite outdated and i want to use the new version.</p>
+<pre><code>Channel Name: Puppet 7 EL7 x86_64
+Channel Label: puppet-7-el7-x86_64
+Parent Channel: Centos 7 Base - x86_64
+Channel Summary: puppet-7-el7-x86_64
+</code></pre>
+<h3 id="creating-repositories-for-children-channels">Creating Repositories for Children Channels</h3>
+<p>Create a repository for each children channels:</p>
+<pre><code>Repository URL for centos7-updates-x86_64: http://mirror.rise.ph/centos/7.8.2003/updates/x86_64/
+# This might be changed since the updated CentOS version upon this writing is 7.8
+Repository URL for epel7-x86_64: https://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/
+Repository URL for spacewalk-client-210-x86_64: https://copr-be.cloud.fedoraproject.org/results/%40spacewalkproject/spacewalk-2.10-client/epel-7-x86_64/
+Repository URL for centos-7-extras-x86_64: http://mirror.centos.org/centos/7/extras/x86_64/
+Repositort URL for puppet-7-el7-x86_64: http://yum.puppetlabs.com/puppet/el/7/x86_64/
+</code></pre>
+<h3 id="pushing-packages-to-spacewalk-repo">Pushing packages to spacewalk repo</h3>
+<p>Add created repository for each children channels and sync the channels through spacewalk website or terminal: </p>
+<p><code>spacewalk-repo-sync -c spacewalk-client-210-x86_64</code></p>
+<p><code>spacewalk-repo-sync -c centos7-updates-x86_64</code></p>
+<p>Example output:</p>
+<pre><code>[root@spacewalk rpm-gpg]# spacewalk-repo-sync -c spacewalk-client-210-x86_64
+22:50:25 ======================================
+22:50:25 | Channel: spacewalk-client-210-x86_64
+22:50:25 ======================================
+22:50:25 Sync of channel started.
+22:50:25
+22:50:25   Processing repository with URL: https://copr-be.cloud.fedoraproject.org/results/%40spacewalkproject/spacewalk-2.10/epel-7-x86_64/
+22:50:27     Packages in repo:               206
+22:50:27     Packages already synced:          0
+22:50:27     Packages to sync:               138
+22:50:27     New packages to download:       138
+22:50:27   Downloading packages:
+</code></pre>
+<p>Due to issues with EPEL repository is too big to sync to spacewalk, you may want to download the rpm packages you want to be in the EPEL channel, then push it to spacewalk</p>
+<p><code>rhnpush -v --channel=epel7-x86_64  --server=http://localhost --dir=/root/epel-packages</code></p>
+<h2 id="distribution-and-kickstart-profile">Distribution and Kickstart Profile</h2>
+<h3 id="creating-distributions">Creating Distributions</h3>
+<p>On Systems tab -&gt; Kickstart -&gt; Distribution -&gt; Create a new Distribution</p>
+<p>Download the latest CentOS ISO file:</p>
+<p><code>wget http://mirror.pregi.net/centos/7.8.2003/isos/x86_64/CentOS-7-x86_64-Everything-2003.iso</code></p>
+<p>Mount the ISO file and copy the contents to /var/spacewalk/repo/CentOS7-x86_64</p>
+<p><code>cp --recursive --verbose /mnt/distros/CentOS7-x86_64/ /var/spacewalk/repo/</code></p>
+<p>Change the permissions of the file and its SELINUX file content:</p>
+<pre><code>cd /var/spacewalk/repo/
+find ./ -type d -exec chmod 755 {} \;
+find ./ -type f -exec chmod 644 {} \;
+find /var/spacewalk/repo/ -type f -exec chown apache:apache {} \; 
+find /var/spacewalk/repo/ -type d -exec chown apache:root {} \;
+semanage fcontext -a -t spacewalk_data_t '/var/spacewalk/repo/CentOS7-x86_64(/.*)?'
+restorecon -Rv .
+</code></pre>
+<p>Create the Distribution:</p>
+<pre><code>Distribution Label: centos7-base-x86_64
+Tree Path: /var/spacewalk/repo/CentOS7-x86_64
+Base Channel: Centos 7 Base - x86_64
+Installer Generation: Red Hat Enterprise Linux 7
+</code></pre>
+<p><a href="../assets/images/spacewalk/spacewalk-image10.png"><img alt="" src="../assets/images/spacewalk/spacewalk-image10.png" /></a></p>
+<h3 id="create-activation-key">Create Activation Key</h3>
+<p>On Systems tab -&gt; Activation Key -&gt; Create New Key</p>
+<p><a href="../assets/images/spacewalk/spacewalk-image11.png"><img alt="" src="../assets/images/spacewalk/spacewalk-image11.png" /></a></p>
+<p>On Child Channels, click all child channels and hit Update Key: </p>
+<p><a href="../assets/images/spacewalk/spacewalk-image12.png"><img alt="" src="../assets/images/spacewalk/spacewalk-image12.png" /></a></p>
+<h3 id="creating-kickstart-profile">Creating Kickstart Profile</h3>
+<p>On Systems tab -&gt; Kickstart -&gt; Profiles -&gt; Create Kickstart Profile</p>
+<pre><code>Label: CentOS7-ks
+Base Channel: Centos 7 Base - x86_64
+CHECK: Always use the newest Tree for this base channel. "Newest" is determined by the date it was last modified.
+</code></pre>
+<p>Virtualization Type: None</p>
+<p><a href="../assets/images/spacewalk/spacewalk-image13.png"><img alt="" src="../assets/images/spacewalk/spacewalk-image13.png" /></a></p>
+<p>On Step 2, leave it as default: </p>
+<p><a href="../assets/images/spacewalk/spacewalk-image14.png"><img alt="" src="../assets/images/spacewalk/spacewalk-image14.png" /></a></p>
+<p>On Step 3, Setup Root Password: </p>
+<p><a href="../assets/images/spacewalk/spacewalk-image15.png"><img alt="" src="../assets/images/spacewalk/spacewalk-image15.png" /></a></p>
+<p>You have now created your Kickstart profile:</p>
+<p><a href="../assets/images/spacewalk/spacewalk-image16.png"><img alt="" src="../assets/images/spacewalk/spacewalk-image16.png" /></a></p>
+<p>On your created kickstart profile, go to Kickstart Details then Operating System tab. Click all the child channels and click Update Kickstart:</p>
+<p><a href="../assets/images/spacewalk/spacewalk-image17.png"><img alt="" src="../assets/images/spacewalk/spacewalk-image17.png" /></a></p>
+<p>In Advance Options, Change timezone to Asia/Manila</p>
+<p>In Software Tab, in Package Groups, Add the following in the comment box and click update packages: </p>
+<pre><code>@ Base
+rhn-setup
+rhn-check
+rhn-client-tools
+rhn-custom-info
+rhncfg-actions
+rhncfg-client
+rhncfg-management
+yum-rhn-plugin
+python-dmidecode
+python-hwdata
+</code></pre>
+<p><a href="../assets/images/spacewalk/spacewalk-image18.png"><img alt="" src="../assets/images/spacewalk/spacewalk-image18.png" /></a></p>
+<p>In Activation Keys, Click CentOS 7 Activation Key:</p>
+<p><a href="../assets/images/spacewalk/spacewalk-image19.png"><img alt="" src="../assets/images/spacewalk/spacewalk-image19.png" /></a></p>
+<h2 id="setting-up-errata-pxe-configuration-etc">Setting up Errata, PXE configuration, Etc.</h2>
+<h3 id="errata-importation">Errata Importation</h3>
+<p>Sources: <a href="https://github.com/gmirsky/spacewalk-errata-import/">link1</a> <a href="https://cefs.steve-meier.de/">link2</a></p>
+<p>import <code>spacewalk-errata-import.sh</code> on GitHub to your system. and make the script executable.</p>
+<p><code>chmod +x spacewalk-errata-import.sh</code></p>
+<p>Download the following packages: </p>
+<p><code>yum install fping perl-Frontier-RPC perl-Text-Unidecode -y</code></p>
+<p>Run the script:</p>
+<pre><code>[root@spacewalk ~]# ./spacewalk-errata-import.sh -u '$username' -p '$password' -s '$spacewalk_fqdn' -v
+--2020-08-04 06:01:27--  https://cefs.steve-meier.de/errata.latest.xml
+Resolving cefs.steve-meier.de (cefs.steve-meier.de)... 143.204.243.87, 143.204.243.118, 143.204.243.3, ...
+Connecting to cefs.steve-meier.de (cefs.steve-meier.de)|143.204.243.87|:443... connected.
+HTTP request sent, awaiting response... 302 Moved Temporarily
+Location: https://cefs.b-cdn.net/errata.latest.xml [following]
+--2020-08-04 06:01:28--  https://cefs.b-cdn.net/errata.latest.xml
+Resolving cefs.b-cdn.net (cefs.b-cdn.net)... 89.187.162.241
+Connecting to cefs.b-cdn.net (cefs.b-cdn.net)|89.187.162.241|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 1284865 (1.2M) [text/xml]
+Saving to: ‘/root/errata.latest.xml’
+100%[======================================&gt;] 1,284,865   1.41MB/s   in 0.9s
+</code></pre>
+<p>Errata will now appear on Spacewalk UI:</p>
+<p><a href="../assets/images/spacewalk/spacewalk-image20.png"><img alt="" src="../assets/images/spacewalk/spacewalk-image20.png" /></a></p>
+<h3 id="pxe-configuration">PXE Configuration</h3>
+<p>At first, you will be stuck to the Boot Menu due to TFTP is still disabled in the system:</p>
+<p><a href="../assets/images/spacewalk/spacewalk-image21.png"><img alt="" src="../assets/images/spacewalk/spacewalk-image21.png" /></a></p>
+<p>Enable TFTP Service on Spacewalk Server:</p>
+<p>Install xinetd service, an additional required package for TFTP to work.</p>
+<p><code>yum install -y xinetd</code></p>
+<p>Set <code>disable = no</code> line on /etc/xinetd.d/tftp</p>
+<pre><code>service tftp
+{
+         socket_type = dgram
+         protocol = udp
+         wait = yes
+         user = root
+         server = /usr/sbin/in.tftpd
+         server_args = -c -s /tftpboot
+         disable = no
+         per_source = 15
+         cps = 80 2
+         flags = IPv4
+}
+</code></pre>
+<p>Enable TFTP and xinetd Service on Spacewalk Server:</p>
+<pre><code>systemctl enable --now tftp.service xinetd
+firewall-cmd --add-service=tftp
+firewall-cmd --runtime-to-perm
+</code></pre>
+<p>When you run the PXE again, you will be having error on audit logger of spacewalk:</p>
+<p><a href="../assets/images/spacewalk/spacewalk-image22.png"><img alt="" src="../assets/images/spacewalk/spacewalk-image22.png" /></a></p>
+<p>Follow what journalctl troubleshooter says:</p>
+<p><code>setsebool -P tftp_home_dir 1</code></p>
+<p>Change the SELinux context of the following</p>
+<pre><code>semanage fcontext -a -t public_content_t "/var/lib/tftpboot/.*"
+semanage fcontext -a -t public_content_t "/var/www/cobbler/images/.*"
+semanage fcontext -a -t spacewalk_data_t '/var/spacewalk/repo/CentOS7-x86_64(/.*)?'
+restorecon -Rv /var/spacewalk/repo/CentOS7-x86_64
+</code></pre>
+<p>Run <code>cobbler sync</code> to set up the files on /var/lib/tftp folder, the output should be like this:</p>
+<pre><code>[root@spacewalk CentOS7-x86_64]# cobbler sync
+task started: 2020-08-05_043208_sync
+task started (id=Sync, time=Wed Aug  5 04:32:08 2020)
+running pre-sync triggers
+cleaning trees
+removing: /var/www/cobbler/images/centos7-base-x86_64:1:sandbox
+removing: /var/lib/tftpboot/pxelinux.cfg/default
+removing: /var/lib/tftpboot/grub/images
+...  
+received on stdout:
+received on stderr:
+generating PXE menu structure
+running post-sync triggers
+...
+*** TASK COMPLETE ***
+</code></pre>
+<h3 id="gpg-public-keys-and-ssl-certificates">GPG Public Keys and SSL Certificates</h3>
+<p>This must be set to automatically install certificates needed for package authenticity. </p>
+<p>Systems Tab -&gt; Kickstart -&gt; GPG and SSL Keys -&gt; Create Stored Key/Cert</p>
+<p><a href="../assets/images/spacewalk/spacewalk-image23.png"><img alt="" src="../assets/images/spacewalk/spacewalk-image23.png" /></a></p>
+<p>After that, you can paste or upload GPG or SSL Keys.</p>
+<p>Go to Profiles then select you kickstart file, in the System Details choose GPG &amp; SSL, and choose the GPG keys you save in the last instruction, then hit update keys. </p>
+<p><a href="../assets/images/spacewalk/spacewalk-image24.png"><img alt="" src="../assets/images/spacewalk/spacewalk-image24.png" /></a></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../freeipa/" class="btn btn-neutral float-right" title="FreeIPA">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../gateway/" class="btn btn-neutral" title="DNS and DHCP"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../gateway/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../freeipa/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
