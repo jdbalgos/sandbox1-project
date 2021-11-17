@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="canonical" href="http://docs.sandbox.io/monitoring/">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Monitoring - Deve Linux Sandbox Project</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Monitoring";
+    var mkdocs_page_input_path = "monitoring.md";
+    var mkdocs_page_url = "/monitoring/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Deve Linux Sandbox Project</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../gateway/">DNS and DHCP</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../spacewalk/">Spacewalk</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../freeipa/">FreeIPA</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../bot/">Automation</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../storage/">Storage</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../backup/">Backup</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../app/">Application</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../mail/">Mail</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Monitoring</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#dhcp-and-dns-entries">DHCP and DNS Entries</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#installation-and-setup">Installation and Setup</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#snmp-install-for-clients">SNMP install for clients</a>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../others/">Others</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Deve Linux Sandbox Project</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Monitoring</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="monitoring-server">Monitoring Server</h1>
+<p>Monitoring server is design to monitor the systems in the environment via SNMP. The application that will run on this server is Nagios</p>
+<p>I want to try to use net-snmp as much as possible and dont want to install NRPE on each device, kinda making it agentless monitoring system.</p>
+<h2 id="dhcp-and-dns-entries">DHCP and DNS Entries</h2>
+<p>Forward lookup zone</p>
+<pre><code>@              IN  NS  monitoring.sandbox.io.
+@              IN  A    10.11.100.112
+monitoring     IN  A    10.11.100.112
+</code></pre>
+<p>Reverse lookup zone</p>
+<pre><code>@              IN  NS  monitoring.sandbox.io.
+monitoring     IN  A    10.11.100.112
+112            IN  PTR monitoring.sandbox.io.
+</code></pre>
+<p>DHCP entry</p>
+<pre><code>host monitoring {
+     hardware ethernet 22:B2:C3:62:05:96;
+     fixed-address 10.11.100.112;
+}
+</code></pre>
+<h2 id="installation-and-setup">Installation and Setup</h2>
+<p>Install Nagios and necessary files</p>
+<pre><code>- name: install necessary files
+  yum:
+    name:
+        - nagios
+        - nagios-selinux
+        - nagios-plugins
+        - nagios-plugins-ping
+        - nagios-plugins-http
+        - nagios-plugins-load
+        - nagios-plugins-ssh
+        - nagios-plugins-snmp
+        - nagios-plugins-tcp
+        - nagios-common
+        - python2-passlib
+     state: present
+</code></pre>
+<p>Open HTTP port on firewall</p>
+<pre><code>- name: open firewall ports
+  firewalld:
+     service: http
+     state: enabled
+     permanent: true
+     immediate: true
+</code></pre>
+<p>Configure nagios.cfg file to use /etc/nagios/servers as location of the servers and what to monitor to them</p>
+<pre><code>- name: add configuration folder configuration in nagios.cfg
+  lineinfile:
+     regexp: '^#cfg_dir=/etc/nagios/servers'
+     line: 'cfg_dir=/etc/nagios/servers'
+     path: /etc/nagios/nagios.cfg
+</code></pre>
+<p>/etc/nagios/servers must be cleaned first before adding files, this is due to i want to edit some configuration files on this, some remnants of the this i edit may persist especially if i delete servers configurations on the main repo. This would be followed by creating the directory again</p>
+<pre><code>- name: clean server directory first before adding files
+  file:
+     path: /etc/nagios/servers
+     state: absent
+- name: create what have you deleted xd
+  file:
+     state: directory
+     mode: '0755'
+     path: /etc/nagios/servers
+</code></pre>
+<p>Copy the contents of /usr/share/nagios/html to /var/ww/html</p>
+<pre><code>- name: copy web contents of nagios to html root directory
+  copy:
+     src: /usr/share/nagios/html/
+     dest: /var/www/html
+     directory_mode: true
+     remote_src: yes
+     owner: apache
+     group: apache
+</code></pre>
+<p>Replace email on contacts.cfg</p>
+<pre><code>- name: replace mail email
+  replace:
+     regexp: 'nagios@localhost'
+     replace: 'root@sandbox.io'
+     path: /etc/nagios/objects/contacts.cfg
+</code></pre>
+<p>Add additional commands for nagios to follow when monitoring the servers</p>
+<pre><code>- name: additional functions to commands.cfg
+  blockinfile:
+     path: /etc/nagios/objects/commands.cfg
+     block: |
+        define command {
+             command_name check_snmp_memory
+             command_line $USER1$/check_snmp_memory $HOSTADDRESS$ $ARG1$ $ARG2$
+        }
+        define command {
+             command_name check_snmp_storage
+             command_line $USER1$/check_snmp -H $HOSTADDRESS$ -C sandbox -o .1.3.6.1.4.1.2021.9.1.9.1 -w $ARG1$ -c $ARG2$
+        }
+        define command {
+             command_name     check_snmp_load_avg
+             command_line     $USER1$/check_snmp -H $HOSTADDRESS$ -C sandbox -o .1.3.6.1.4.1.2021.10.1.3.2 -w $ARG1$ -c $ARG2$
+        }
+</code></pre>
+<p>check_snmp_memory is the only script that i made so far, it is using a calculation of (total_memory - ( free_memory + cache_memory)) / total memory to calculate the memory space available. I have included cache_memory since that cache_memory is an unused memory some process are using since no one is using it, and will free up once the linux kernel wants to use it on another process</p>
+<pre><code>#!/bin/bash
+
+Help()
+{
+    # Display Help
+    echo "Syntax: ./check_snmp_memory [host] [warning_value_int] [critical_value_int]"
+    echo "Warning value should not be greater than Critical value"
+}
+
+if [ $2 -gt $3 ]; then
+     Help
+     exit 1
+fi
+
+if [ "$#" -ne 3  ]; then
+     Help
+     exit 1
+fi
+snmpwalk -v2c -c sandbox $1 &gt; /dev/null 2&gt;&amp;1
+if [ $? -gt 0 ]; then
+     echo "CRITICAL: No response to $1"
+     exit 2
+fi
+
+FREE_MEM=`snmpgetnext -Oqv -v 2c -c sandbox $1 .1.3.6.1.4.1.2021.4.6 | cut -d " " -f 1`
+CACHE_MEM=`snmpgetnext -Oqv -v 2c -c sandbox $1 .1.3.6.1.4.1.2021.4.15 | cut -d " " -f 1`
+TOTAL_MEM=`snmpgetnext -Oqv -v 2c -c sandbox $1 .1.3.6.1.4.1.2021.4.5 | cut -d " " -f 1`
+MEM_PERCENT=`echo "$(( (($TOTAL_MEM - ($FREE_MEM + $CACHE_MEM)) * 100) / $TOTAL_MEM ))"`
+MEM_PERCENT_STRING=`echo 'scale=2;' "$(( ($TOTAL_MEM - ($FREE_MEM + $CACHE_MEM)) * 100 ))" / $TOTAL_MEM | bc -l`
+USED_MEM_MB=`echo "$(( ($TOTAL_MEM - ($FREE_MEM + $CACHE_MEM)) / 1024  ))" MB`
+TOTAL_MEM_MB=`echo "$(( $TOTAL_MEM/1024 ))" MB`
+if [ $MEM_PERCENT -lt $2 ]; then
+     echo "OK: $MEM_PERCENT_STRING% - $USED_MEM_MB / $TOTAL_MEM_MB "
+     exit
+fi
+
+if [ $MEM_PERCENT -ge $2 ] &amp;&amp; [ $MEM_PERCENT -lt $3 ]; then
+     echo "WARNING: $MEM_PERCENT_STRING% - $USED_MEM_MB / $TOTAL_MEM_MB"
+     exit 1
+fi
+
+if [ $MEM_PERCENT -ge $3 ]; then
+     echo "CRITICAL: $MEM_PERCENT_STRING% - $USED_MEM_MB / $TOTAL_MEM_MB"
+     exit 2
+fi
+</code></pre>
+<p>Set the username and password when logging in to monitoring server</p>
+<pre><code>- name: set htpasswd to nagiosadmin
+  htpasswd:
+    path: /etc/nagios/htpasswd.users
+    name: [nagios_username]
+    password: [nagios_password]
+</code></pre>
+<p>Since /etc/nagios/servers is already cleaned out, we can now paste each servers configuration</p>
+<pre><code>- name: add servers
+  copy:
+    src: ../files/nagios/servers/
+    dest: /etc/nagios/servers
+    mode: '0644'
+    group: nagios
+</code></pre>
+<p>Servers configuration file should look like these</p>
+<pre><code>define host {
+        use                             linux-server
+        host_name                       dev2
+        alias                           DEV server
+        address                         dev2.sandbox.io
+        max_check_attempts              5
+        check_interval                  2
+        check_period                    24x7
+        notification_interval           30
+        notification_period             24x7
+}
+
+define service {
+        use                             generic-service
+        host_name                       dev2
+        service_description             PING
+        check_command                   check_ping!100.0,20%!500.0,60%
+}
+
+define service {
+        use                             generic-service
+        host_name                       dev2
+        service_description             Memory Usage
+        check_command                   check_snmp_memory!85!90
+#        notifications_enabled           1
+}
+
+define service {
+        use                             generic-service
+        host_name                       dev2
+        service_description             Storage Usage
+        check_command                   check_snmp_storage!85!90
+}
+
+define service {
+        use                             generic-service
+        host_name                       dev2
+        service_description             HTTP Port Check
+        check_command                   check_tcp!80
+}
+
+define service {
+        use                             generic-service
+        host_name                       dev2
+        service_description             Load Average - 5mins
+        check_command                   check_snmp_load_avg!0.70!0.90
+}
+</code></pre>
+<p>Start or restart nagios and httpd service</p>
+<pre><code>- name: start the services
+  service:
+    name: '{{item}}'
+    enabled: true
+    state: restarted
+  with_items:
+    - nagios
+    - httpd
+</code></pre>
+<h2 id="snmp-install-for-clients">SNMP install for clients</h2>
+<p>We need to open port 161/udp in firewalld </p>
+<pre><code>firewall-cmd --add-service=snmp --permanent
+firewall-cmd --reload
+</code></pre>
+<p>Install net-snmp and utils</p>
+<pre><code>- name: install snmp tools for nagios monitoring
+  yum:
+    name:
+      - "net-snmp"
+      - "net-snmp-utils"
+    state: present
+</code></pre>
+<p>Copy snmp.conf file in the repo to /etc/snmp/snmpd.conf</p>
+<pre><code>- name: copy snmp.conf file
+  copy:
+    src: files/nagios/snmp/snmpd.conf
+    dest: /etc/snmp/snmpd.conf
+</code></pre>
+<p>Start snmp service</p>
+<pre><code>- name: start and enable snmpd
+  service:
+    name: snmpd
+    state: started
+    enabled: true
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../others/" class="btn btn-neutral float-right" title="Others">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../mail/" class="btn btn-neutral" title="Mail"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../mail/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../others/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
