@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="canonical" href="http://docs.sandbox.io/logs/">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Logs - Deve Linux Sandbox Project</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Logs";
+    var mkdocs_page_input_path = "logs.md";
+    var mkdocs_page_url = "/logs/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Deve Linux Sandbox Project</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../gateway/">DNS and DHCP</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../spacewalk/">Spacewalk</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../docs/">Documentation</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../freeipa/">FreeIPA</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../bot/">Automation</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../storage/">Storage</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../backup/">Backup</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../app/">Application</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../mail/">Mail</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../monitoring/">Monitoring</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Logs</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#dhcp-and-dns-entries">DHCP and DNS Entries</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#installation-and-setup">Installation and Setup</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#pushing-packages-to-spacewalk">Pushing packages to spacewalk</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#graylog-installation">Graylog Installation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#syslog-configuration-per-node">Syslog configuration per node</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../others/">Others</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Deve Linux Sandbox Project</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Logs</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="logs-server">Logs Server</h1>
+<p>Logs Server is designed to centralized all the logs of the environment. This can be done only by a simple syslog server, but since we may want to visualized the logs i am installing graylog and elasticsearch. mongodb is also included in the installation.</p>
+<h2 id="dhcp-and-dns-entries">DHCP and DNS Entries</h2>
+<p>Forward lookup zone</p>
+<pre><code>@           IN  NS  logs.sandbox.io.
+@           IN  A   10.11.100.113
+logs        IN  A   10.11.100.113
+</code></pre>
+<p>Reverse lookup zone</p>
+<pre><code>@           IN  NS  logs.sandbox.io.
+logs        IN  A   10.11.100.113
+113         IN  PTR logs.sandbox.io.
+</code></pre>
+<p>DHCP entry</p>
+<pre><code>host logs {
+    hardware ethernet 46:4E:3B:74:F6:A4;
+    fixed-address 10.11.100.113;
+}
+</code></pre>
+<h2 id="installation-and-setup">Installation and Setup</h2>
+<h3 id="pushing-packages-to-spacewalk">Pushing packages to spacewalk</h3>
+<p>There are packages that is not available on base or epel repo of centos/spacewalk, in order to have the required packages i downloaded the packages outside first then pushing the packages on spacewalk server</p>
+<pre><code>yum install --downloadonly --downloaddir=[download_location] [package]
+scp -r [download_location] spacewalk:[directory]
+</code></pre>
+<p>On the spacewalk server, this is for the mongod package, you can add elasticsearch and graylog accordingly</p>
+<pre><code>[root@spacewalk mongodb]# ls
+mongodb-org-4.0.27-1.el7.x86_64.rpm         mongodb-org-shell-4.0.27-1.el7.x86_64.rpm
+mongodb-org-mongos-4.0.27-1.el7.x86_64.rpm  mongodb-org-tools-4.0.27-1.el7.x86_64.rpm
+mongodb-org-server-4.0.27-1.el7.x86_64.rpm
+[root@spacewalk mongodb]# rhnpush --server=http://localhost --channel=mongodb-4-el7-x86_64 --nosig --dir=/root/files/rpm/mongodb
+Username: [redacted]
+Password: [redacted]
+</code></pre>
+<h3 id="graylog-installation">Graylog Installation</h3>
+<p>Install all package needed.</p>
+<pre><code>- name: install packages for graylog
+  yum:
+    name:
+      - wget
+      - pwgen
+      - java-1.8.0-openjdk-headless
+      - elasticsearch
+      - mongodb-org
+      - graylog-server
+</code></pre>
+<p>Change elasticsearch.yml cluster.name</p>
+<pre><code>- name: replace cluster.name
+  lineinfile:
+    path: /etc/elasticsearch/elasticsearch.yml
+    regexp: '^#cluster.name:'
+    line: 'cluster.name: graylog'
+</code></pre>
+<p>Change server.conf in /etc/graylog with the following</p>
+<pre><code>- name: root_password_sha2
+  lineinfile:
+    path: /etc/graylog/server/server.conf
+    regexp: '^root_password_sha2'
+    line: 'root_password_sha2 = a109e36947ad56de1dca1cc49f0ef8ac9ad9a7b1aa0df41fb3c4cb73c1ff01ea'
+- name: root_email
+  lineinfile:
+    path: /etc/graylog/server/server.conf
+    regexp: '^#root_email'
+    line: 'root_email = "root@sandbox.io"'
+- name: elasticsearch_shards
+  lineinfile:
+    path: /etc/graylog/server/server.conf
+    regexp: '^elasticsearch_shards'
+    line: 'elasticsearch_shards = 1'
+- name: http_bind_address
+  lineinfile:
+    path: /etc/graylog/server/server.conf
+    regexp: '^#http_bind_address'
+    line: 'http_bind_address = logs.sandbox.io:9000'
+</code></pre>
+<p>For the password secret, you can generate a secret using <code>pwgen -N 1 -s 96</code></p>
+<pre><code>- name: password_secret
+  lineinfile:
+    path: /etc/graylog/server/server.conf
+    regexp: '^password_secret'
+    line: 'password_secret = Mxz2LOVjGFs5417wEEAKaheZDjYDE0GgcfB58ISc6I4C3A97wuee2n22ajXugw9igqngw7jb5Yq6kqOhUcWIlvZDR85eIO00'
+</code></pre>
+<p>When using Self Signed Certificate to the graylog server, you can refer <a href="https://docs.graylog.org/docs/https">here</a></p>
+<pre><code>- name: copy cert.pem to /etc/pki/tls/certs/
+  copy:
+    src: files/logs/ssl/cert.pem
+    dest: /etc/pki/tls/certs/cert.pem
+- name: copy pkcs8-encrypted.pem to /etc/pki/tls/private/
+  copy:
+    src: files/logs/ssl/pkcs8-encrypted.pem
+    dest: /etc/pki/tls/private/pkcs8-encrypted.pem
+# on server.conf
+- name: http_enable_tls
+  lineinfile:
+    path: /etc/graylog/server/server.conf
+    regexp: '^#http_enable_tls'
+    line: 'http_enable_tls = true'
+- name: http_tls_cert_file
+  lineinfile:
+    path: /etc/graylog/server/server.conf
+    regexp: '^#http_tls_cert_file'
+    line: 'http_tls_cert_file = /etc/pki/tls/certs/cert.pem'
+- name: http_tls_key_file
+  lineinfile:
+    path: /etc/graylog/server/server.conf
+    regexp: '^#http_tls_key_file'
+    line: 'http_tls_key_file = /etc/pki/tls/private/pkcs8-encrypted.pem'
+- name: http_tls_key_password
+  lineinfile:
+    path: /etc/graylog/server/server.conf
+    regexp: '^#http_tls_key_password'
+    line: 'http_tls_key_password = secret'
+</code></pre>
+<p>You need to add the self signed certificate to JVM trust store</p>
+<pre><code>- name: create symlink for cacerts.jks
+  file:
+    src: /etc/pki/ca-trust/extracted/java/cacerts
+    dest: /etc/pki/tls/certs/cacerts.jks
+    state: link
+- name: import java cert
+  java_cert:
+    cert_path: /etc/pki/tls/certs/cert.pem
+    keystore_path: /etc/pki/tls/certs/cacerts.jks
+    keystore_pass: changeit
+    keystore_create: true
+    cert_alias: graylog-self-signed
+    state: present
+</code></pre>
+<p>Since both graylog and elasticsearch consumes a lot of memory, you may want to lessen the memory its using. this task is optional</p>
+<pre><code>- name: GRAYLOG_SERVER_JAVA_OPTS
+  lineinfile:
+    path: /etc/sysconfig/graylog-server
+    regexp: '^GRAYLOG_SERVER_JAVA_OPTS'
+    line: 'GRAYLOG_SERVER_JAVA_OPTS="-Xms512m -Xmx512m -XX:NewRatio=1 -server -XX:+ResizeTLAB -XX:+UseConcMarkSweepGC -XX:+CMSConcurrentMTEnabled -XX:+CMSClassUnloadingEnabled -XX:+UseParNewGC -XX:-OmitStackTraceInFastThrow"'
+- name: 512m java options for elastic search
+  lineinfile:
+    path: /etc/elasticsearch/jvm.options
+    regexp: '{{item.0}}'
+    line: '{{item.1}}'
+  with_nested:
+    - ['^-Xms', '^-Xmx']
+    - ['-Xms512m', '-Xmx512m']
+</code></pre>
+<p>Mongod has some issues regarding SELINUX, you may want to disable it or create a selinux modules in order it to work</p>
+<pre><code>- name: copy files
+  copy:
+    src: '{{item}}'
+    dest: /tmp
+  with_items:
+    - 'files/logs/modules/my-ftdc-01.pp'
+- name: execute semodules
+  shell:
+    cmd: 'semodule -i /tmp/my-ftdc-01.pp'
+    creates: /home/users/bot-acc/.system-checks/semodule_run
+</code></pre>
+<p>contents of my-ftdc-01 is in binary format and can be only seen in its .te file</p>
+<pre><code>#my-ftdc-01.te
+module my-ftdc 1.0;
+
+require {
+        type proc_net_t;
+        type mongod_t;
+        class file { open read };
+}
+
+#============= mongod_t ==============
+allow mongod_t proc_net_t:file open;
+
+#!!!! This avc is allowed in the current policy
+allow mongod_t proc_net_t:file read;
+</code></pre>
+<p>Open ports for graylog to work with</p>
+<pre><code>- name: enable firewalld for rsyslog
+  firewalld:
+    port: '{{item}}'
+    immediate: true
+    permanent: true
+    state: enabled
+  with_items:
+    - 1514/udp
+    - 9000/tcp
+</code></pre>
+<p>If graylog is newly installed, you may want to perform a daemon reload. Enable and start the services right after</p>
+<pre><code>- name: daemon reload
+  systemd:
+    daemon_reload: true
+- name: enable and start services
+  service:
+    name: '{{item}}'
+    state: started
+    enabled: true
+  with_items:
+    - elasticsearch
+    - mongod
+    - graylog-server
+</code></pre>
+<p>Browse to https://logs.sandbox.io:9000 to access graylog UI</p>
+<p><a href="../assets/images/logs/logs-image-01.jpg"><img alt="" src="../assets/images/logs/logs-image-01.jpg" /></a></p>
+<p>Create a new input by navigating to system -&gt; inputs</p>
+<p><a href="../assets/images/logs/logs-image-04.jpg"><img alt="" src="../assets/images/logs/logs-image-04.jpg" /></a></p>
+<p>Then create new syslog UDP input </p>
+<p><a href="../assets/images/logs/logs-image-02.jpg"><img alt="" src="../assets/images/logs/logs-image-02.jpg" /></a></p>
+<p>Wait until the newly created input to run, after that you should start collecting logs data from servers</p>
+<p><a href="../assets/images/logs/logs-image-03.jpg"><img alt="" src="../assets/images/logs/logs-image-03.jpg" /></a></p>
+<h3 id="syslog-configuration-per-node">Syslog configuration per node</h3>
+<p>In order for servers to send logs on graylog, we need to set it up on /etc/rsyslog.conf on each server, then restart the service.</p>
+<pre><code>- name: add rsyslog server details
+  lineinfile:
+    path: /etc/rsyslog.conf
+    line: "*.info;mail.none;authpriv.none;cron.none @logs.sandbox.io:1514"
+- name: start and enable snmpd
+  service:
+    name: '{{item}}'
+    state: restarted
+    enabled: true
+  with_items:
+    - 'rsyslog'
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../others/" class="btn btn-neutral float-right" title="Others">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../monitoring/" class="btn btn-neutral" title="Monitoring"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../monitoring/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../others/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

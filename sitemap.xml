@@ -36,6 +36,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>http://docs.sandbox.io/logs/</loc>
+         <lastmod>2021-11-28</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>http://docs.sandbox.io/mail/</loc>
          <lastmod>2021-11-28</lastmod>
          <changefreq>daily</changefreq>

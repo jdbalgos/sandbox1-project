@@ -51,15 +51,9 @@
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#about-this-site">About this site</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#server-planning">Server planning</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a>
+    <li class="toctree-l2"><a class="reference internal" href="#server-details">Server details</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#server-details">Server details</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#deployments">Deployments</a>
-    </li>
-        </ul>
+    <li class="toctree-l2"><a class="reference internal" href="#deployments">Deployments</a>
     </li>
     </ul>
                     </li>
@@ -105,6 +99,10 @@
                     </li>
                 </ul>
                 <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="logs/">Logs</a>
+                    </li>
+                </ul>
+                <ul>
                     <li class="toctree-l1"><a class="reference internal" href="others/">Others</a>
                     </li>
                 </ul>
@@ -143,30 +141,11 @@
               
                 <h1 id="deve-sandbox-project">Deve Sandbox Project</h1>
 <h2 id="about-this-site">About this site</h2>
-<p>I am creating my own environment, all based on CentOS 7 Linux Servers.</p>
-<h2 id="server-planning">Server planning</h2>
-<h3 id="overview">Overview</h3>
-<ul>
-<li>I will use Proxmox virtual environment. Specs: i7, 16gb RAM, 1TB HDD</li>
-<li>DNS and DHCP server -&gt; BIND and DHCPD server for static ip and domain configuration.</li>
-<li>System Management -&gt; Spacewalk server, servers will also connect to this for PXE configuration</li>
-<li>Database Server -&gt; PostgreSQL Server, for Spacewalk database. </li>
-<li>Directory Server -&gt; FreeIPA Server</li>
-<li>Automation Server -&gt; Puppet, Ansible Server<ul>
-<li>Puppet for general installation configuration, more like pre install.</li>
-<li>Ansible for node by node configuration/provisioning</li>
-</ul>
-</li>
-<li>Backup Server -&gt; Bacula server for backing up necessary files</li>
-<li>Storage Server -&gt; NFS and LUN server, storage location of Backup server</li>
-<li>APP Server -&gt; 2 Tomcat servers forwarded by HTTPD to port 80</li>
-<li>Load Balancer Server -&gt; HAProxy server for the 2 APP servers</li>
-<li>Mail Server -&gt; Postfix Server configured to send mails to my personal email.</li>
-<li>Monitoring Server -&gt; Nagios Server configured to monitor the server via SNMP only, no agent(nrpe) installed.</li>
-<li>Logs Server -&gt; Syslogs server, installed with Graylog application</li>
-</ul>
-<p>For now this are only the servers that is managed, will add servers accordingly.</p>
-<h3 id="server-details">Server details</h3>
+<p>I am creating a documentation for my created environment, all based on CentOS 7 Linux Servers.</p>
+<p>The documentation on setup of secondary servers are a little bit weird, as this was planned via configuration management. the plan was the secondary servers are "on the go servers" meaning that they can be deployable again if destroyed "accidentally".</p>
+<p>As i am learning on linux server administration/devops engineering, I hope that this is what they do on enterprise environments so things would be more easier for me to adopt once i got a job regarding to this. Though the point of this project was just to learn things :P</p>
+<p>I will also move the project to CentOS stream(or Rocky linux) on the future, but only when i think the project is done or my HDD fails.</p>
+<h2 id="server-details">Server details</h2>
 <table>
 <thead>
 <tr>
@@ -179,17 +158,17 @@
 <tr>
 <td>dns-dhcp.sandbox.io</td>
 <td>10.11.100.1</td>
-<td>DNS-DHCP server</td>
+<td>BIND and DHCPD server</td>
 </tr>
 <tr>
 <td>spacewalk.sandbox.io</td>
 <td>10.11.100.101</td>
-<td>Spacewalk server</td>
+<td>Management server</td>
 </tr>
 <tr>
 <td>directory1.sandbox.io</td>
 <td>10.11.100.102</td>
-<td>IPA server</td>
+<td>LDAP/IPA server</td>
 </tr>
 <tr>
 <td>docs.sandbox.io</td>
@@ -199,17 +178,17 @@
 <tr>
 <td>sql.sandbox.io</td>
 <td>10.11.100.104</td>
-<td>PostgreSQL server</td>
+<td>PostgreSQL server for spacewalk</td>
 </tr>
 <tr>
 <td>bot.sandbox.io</td>
 <td>10.11.100.105</td>
-<td>Puppet, Ansible</td>
+<td>Puppet, Ansible server</td>
 </tr>
 <tr>
 <td>storage.sandbox.io</td>
 <td>10.11.100.106</td>
-<td>LUN and NFS Server</td>
+<td>LUN and NFS Server for Backup</td>
 </tr>
 <tr>
 <td>backup.sandbox.io</td>
@@ -219,22 +198,22 @@
 <tr>
 <td>app1.sandbox.io</td>
 <td>10.11.100.108</td>
-<td>1st Tomcat Server</td>
+<td>1st Tomcat Server, session replication on app2</td>
 </tr>
 <tr>
 <td>app2.sandbox.io</td>
 <td>10.11.100.109</td>
-<td>2nd Tomcat Server</td>
+<td>2nd Tomcat Server, session replication on app1</td>
 </tr>
 <tr>
 <td>ldb.sandbox.io</td>
 <td>10.11.100.110</td>
-<td>Load Balancer(HAProxy) Server</td>
+<td>Load Balancer(HAProxy) server for app1 and app2</td>
 </tr>
 <tr>
 <td>mail.sandbox.io</td>
 <td>10.11.100.111</td>
-<td>Postfix Server</td>
+<td>Postfix Mail Server</td>
 </tr>
 <tr>
 <td>monitoring.sandbox.io</td>
@@ -253,7 +232,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="deployments">Deployments</h3>
+<h2 id="deployments">Deployments</h2>
 <p>Since i am only using 16gb of RAM, I will introduce containers in the environment. Applications will be tested on KVM and LXC before moving to Main environment.</p>
               
             </div>
@@ -309,5 +288,5 @@
 
 <!--
 MkDocs version : 1.2.3
-Build Date UTC : 2021-11-28 13:05:27.055312+00:00
+Build Date UTC : 2021-11-28 16:50:40.333905+00:00
 -->
