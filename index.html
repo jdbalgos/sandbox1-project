@@ -143,25 +143,27 @@
               
                 <h1 id="deve-sandbox-project">Deve Sandbox Project</h1>
 <h2 id="about-this-site">About this site</h2>
-<p>I am creating my own infrastructure, all based on CentOS 7 Linux Servers.</p>
+<p>I am creating my own environment, all based on CentOS 7 Linux Servers.</p>
 <h2 id="server-planning">Server planning</h2>
 <h3 id="overview">Overview</h3>
 <ul>
 <li>I will use Proxmox virtual environment. Specs: i7, 16gb RAM, 1TB HDD</li>
-<li>DNS and DHCP server -&gt; Bind and DHCPd server for static ip and domain configuration.</li>
+<li>DNS and DHCP server -&gt; BIND and DHCPD server for static ip and domain configuration.</li>
 <li>System Management -&gt; Spacewalk server, servers will also connect to this for PXE configuration</li>
-<li>Database Server -&gt; PostgreSQL Server, for Spacewalk database. <ul>
-<li>Export spacewalk server database</li>
-</ul>
-</li>
+<li>Database Server -&gt; PostgreSQL Server, for Spacewalk database. </li>
 <li>Directory Server -&gt; FreeIPA Server</li>
-<li>Automation Server -&gt; Puppet, Ansible<ul>
+<li>Automation Server -&gt; Puppet, Ansible Server<ul>
 <li>Puppet for general installation configuration, more like pre install.</li>
 <li>Ansible for node by node configuration/provisioning</li>
 </ul>
 </li>
-<li>Storage Server -&gt; NFS and LUN server. for backup of all servers</li>
-<li>Backup Server -&gt; Bacula server</li>
+<li>Backup Server -&gt; Bacula server for backing up necessary files</li>
+<li>Storage Server -&gt; NFS and LUN server, storage location of Backup server</li>
+<li>APP Server -&gt; 2 Tomcat servers forwarded by HTTPD to port 80</li>
+<li>Load Balancer Server -&gt; HAProxy server for the 2 APP servers</li>
+<li>Mail Server -&gt; Postfix Server configured to send mails to my personal email.</li>
+<li>Monitoring Server -&gt; Nagios Server configured to monitor the server via SNMP only, no agent(nrpe) installed.</li>
+<li>Logs Server -&gt; Syslogs server, installed with Graylog application</li>
 </ul>
 <p>For now this are only the servers that is managed, will add servers accordingly.</p>
 <h3 id="server-details">Server details</h3>
@@ -202,7 +204,7 @@
 <tr>
 <td>bot.sandbox.io</td>
 <td>10.11.100.105</td>
-<td>Puppet, Ansible and Git Server</td>
+<td>Puppet, Ansible</td>
 </tr>
 <tr>
 <td>storage.sandbox.io</td>
@@ -238,6 +240,11 @@
 <td>monitoring.sandbox.io</td>
 <td>10.11.100.112</td>
 <td>Nagios Server</td>
+</tr>
+<tr>
+<td>logs.sandbox.io</td>
+<td>10.11.100.113</td>
+<td>Graylog Server</td>
 </tr>
 <tr>
 <td>TBD</td>
@@ -302,5 +309,5 @@
 
 <!--
 MkDocs version : 1.2.3
-Build Date UTC : 2021-11-19 06:18:05.745375+00:00
+Build Date UTC : 2021-11-28 13:05:27.055312+00:00
 -->

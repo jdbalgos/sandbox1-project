@@ -216,6 +216,18 @@ monitoring     IN  A    10.11.100.112
      replace: 'root@sandbox.io'
      path: /etc/nagios/objects/contacts.cfg
 </code></pre>
+<p>Copy created SNMP nagios plugins to /usr/lib64/nagios/plugins</p>
+<pre><code>- name: copy created snmp nagios plugins to /usr/lib64/nagios/plugins
+  copy:
+    src: '{{item}}'
+    dest: /usr/lib64/nagios/plugins
+    mode: "755"
+  with_items:
+    - 'files/nagios/tools/check_snmp_memory'
+    - 'files/nagios/tools/check_snmp_disk'
+    - 'files/nagios/tools/check_snmp_app'
+    - 'files/nagios/tools/check_snmp_load'
+</code></pre>
 <p>Add additional commands for nagios to follow when monitoring the servers</p>
 <pre><code>- name: additional functions to commands.cfg
   blockinfile:
@@ -226,15 +238,19 @@ monitoring     IN  A    10.11.100.112
              command_line $USER1$/check_snmp_memory $HOSTADDRESS$ $ARG1$ $ARG2$
         }
         define command {
-             command_name check_snmp_storage
-             command_line $USER1$/check_snmp -H $HOSTADDRESS$ -C sandbox -o .1.3.6.1.4.1.2021.9.1.9.1 -w $ARG1$ -c $ARG2$
+             command_name check_snmp_disk
+             command_line $USER1$/check_snmp_disk $HOSTADDRESS$ $ARG1$ $ARG2$
+         }
+        define command {
+             command_name check_snmp_app
+             command_line $USER1$/check_snmp_app $HOSTADDRESS$ $ARG1$
         }
         define command {
-             command_name     check_snmp_load_avg
-             command_line     $USER1$/check_snmp -H $HOSTADDRESS$ -C sandbox -o .1.3.6.1.4.1.2021.10.1.3.2 -w $ARG1$ -c $ARG2$
+             command_name check_snmp_load
+             command_line $USER1$/check_snmp_load $HOSTADDRESS$ $ARG1$ $ARG2$
         }
 </code></pre>
-<p>check_snmp_memory is the only script that i made so far, it is using a calculation of (total_memory - ( free_memory + cache_memory)) / total memory to calculate the memory space available. I have included cache_memory since that cache_memory is an unused memory some process are using since no one is using it, and will free up once the linux kernel wants to use it on another process</p>
+<p>check_snmp_memory is using a calculation of (total_memory - ( free_memory + cache_memory)) / total memory to calculate the memory space available. I have included cache_memory since that cache_memory is an unused memory the kernel is borrowing for a while and will be available once processes needs it.</p>
 <pre><code>#!/bin/bash
 
 Help()
@@ -281,6 +297,150 @@ if [ $MEM_PERCENT -ge $3 ]; then
      exit 2
 fi
 </code></pre>
+<p>check_snmp_disk checks and print the current,available and total disk space of /</p>
+<pre><code>#!/bin/bash
+
+
+Help()
+{
+     echo "Syntax: ./check_snmp_storage [host] [warning_value_int] [critical_value_int]"
+    echo "Warning value should not be greater than Critical value"
+}
+
+
+if [ $2 -gt $3 ]; then
+  Help
+  exit 1
+fi
+
+if [ "$#" -ne 3  ]; then
+    Help
+    exit 1
+fi
+
+snmpwalk -v2c -c sandbox $1 &gt; /dev/null 2&gt;&amp;1
+if [ $? -gt 0 ]; then
+  echo "HOST CRITICAL: No response to $1"
+exit 2
+fi
+
+PERCENT_SPACE=`snmpgetnext -Oqv -v 2c -c sandbox $1 .1.3.6.1.4.1.2021.9.1.8.1`
+USED_SPACE=`snmpgetnext -Oqv -v 2c -c sandbox $1 .1.3.6.1.4.1.2021.9.1.7.1`
+AVAIL_SPACE=`snmpgetnext -Oqv -v 2c -c sandbox $1 .1.3.6.1.4.1.2021.9.1.6.1`
+TOTAL_SPACE=`echo $USED_SPACE + $AVAIL_SPACE | bc`
+USED_SPACE_GB=`echo 'scale=2;' "$USED_SPACE / 1048576" | bc -l`
+AVAIL_SPACE_GB=`echo 'scale=2;' "$AVAIL_SPACE / 1048576" | bc -l`
+TOTAL_SPACE_GB=`echo 'scale=2;' "$TOTAL_SPACE / 1048576" | bc -l`
+
+if [ $PERCENT_SPACE -lt $2 ]; then
+  echo "STORAGE OK: $PERCENT_SPACE% - $USED_SPACE_GB GB / $TOTAL_SPACE_GB GB - $AVAIL_SPACE_GB GB available"
+  exit
+fi
+
+if [ $PERCENT_SPACE -ge $2 ] &amp;&amp; [ $PERCENT_SPACE -lt $3 ]; then
+  echo "STORAGE WARNING: $PERCENT_SPACE% - $USED_SPACE_GB GB / $TOTAL_SPACE_GB GB - $AVAIL_SPACE_GB GB available"
+  exit 1
+fi
+
+if [ $PERCENT_SPACE -ge $3 ]; then
+  echo "STORAGE CRITICAL: $PERCENT_SPACE% - $USED_SPACE_GB GB / $TOTAL_SPACE_GB GB - $AVAIL_SPACE_GB GB available"
+  exit 2
+fi
+</code></pre>
+<p>check_snmp_app checks if process you want to monitor is running on the server</p>
+<pre><code>#!/bin/bash
+
+Help()
+{
+     echo "Syntax: ./check_snmp_app [host] [app]"
+    echo "Warning value should not be greater than Critical value"
+}
+
+if [ "$#" -ne 2  ]; then
+    Help
+    exit 1
+fi
+
+snmpwalk -v2c -c sandbox $1 &gt; /dev/null 2&gt;&amp;1
+if [ $? -gt 0 ]; then
+  echo "HOST CRITICAL: No response to $1"
+exit 2
+fi
+
+PROC_COUNT=`snmpwalk -v 2c -c sandbox $1 .1.3.6.1.2.1.25.4.2.1.2 | grep -i $2 | wc -l`
+
+if [ $PROC_COUNT -eq 0 ]; then
+  echo "APP CRITICAL: $2 process not running"
+  exit 2
+else
+  echo "APP OK: $2 process running, running instances - $PROC_COUNT"
+  exit
+fi
+</code></pre>
+<p>check_snmp_load checks the load average of the server, i have change the configuration a bit and made load average into percentage(per cpu), it works for me but this is not the real CPU utilization of the server.</p>
+<pre><code>#!/bin/bash
+
+Help()
+{
+     echo "Syntax: ./check_snmp_load [host] [warning_value_percentage] [critical_value_percentage]"
+     echo "Example ./check_snmp_load test.sandbox.io 70 90"
+    echo "Warning value should not be greater than Critical value"
+}
+
+if [ $2 -gt $3 ]; then
+  Help
+  exit 1
+fi
+
+if [ "$#" -ne 3  ]; then
+    Help
+    exit 1
+fi
+
+snmpwalk -v2c -c sandbox $1 &gt; /dev/null 2&gt;&amp;1
+if [ $? -gt 0 ]; then
+  echo "HOST CRITICAL: No response to $1"
+exit 2
+fi
+
+# Will count all CPU of the host, multiplying it to 100 for calculation
+CPU_COUNT=`snmpwalk -v 2c -c sandbox $1 1.3.6.1.2.1.25.3.3.1.2 | wc -l`
+CPU_CAP=`echo $CPU_COUNT '*'100 | bc`
+# Get average load values on 1st,5th and 15th minute. Multiplying it to 100 for calculation purposes, since it is using a value of "0.0X"
+CPU_1ST=`echo \`snmpgetnext -Oqv -v 2c -c sandbox $1 .1.3.6.1.4.1.2021.10.1.3.0\` '*' 100 / 1 | bc`
+CPU_5TH=`echo \`snmpgetnext -Oqv -v 2c -c sandbox $1 .1.3.6.1.4.1.2021.10.1.3.1\` '*' 100 / 1 | bc`
+CPU_15TH=`echo \`snmpgetnext -Oqv -v 2c -c sandbox $1 .1.3.6.1.4.1.2021.10.1.3.2\` '*' 100 / 1 | bc`
+
+# Checking which load average is the highest
+if [ $CPU_1ST -ge $CPU_5TH ] &amp;&amp; [ $CPU_1ST -ge $CPU_15TH ]; then
+  HI_CPU=$CPU_1ST
+  HI_TIME="1 minute mark"
+elif [ $CPU_5TH -gt $CPU_1ST ] &amp;&amp; [ $CPU_5TH -ge $CPU_15TH ]; then
+  HI_CPU=$CPU_5TH
+  HI_TIME="5 minute mark"
+else
+  HI_CPU=$CPU_15TH
+  HI_TIME="15 minute mark"
+fi
+
+CALC_CPU=`echo 'scale=2;' $HI_CPU / $CPU_CAP '*' 100 | bc`
+CALC_CPU_INT=`echo $CALC_CPU / 1 | bc`
+
+if [ $CALC_CPU_INT -lt $2 ]; then
+  echo "LOAD AVG OK: $CALC_CPU_INT% at $HI_TIME"
+  exit
+fi
+
+if [ $CALC_CPU_INT -ge $2 ] &amp;&amp; [ $CALC_CPU_INT -lt $3 ]; then
+  echo "LOAD AVG WARNING: $CALC_CPU_INT% at $HI_TIME"
+  exit 1
+fi
+
+if [ $CALC_CPU_INT -ge $3 ]; then
+  echo "LOAD AVG CRITICAL: $CALC_CPU_INT% at $HI_TIME"
+  exit 2
+fi
+</code></pre>
 <p>Set the username and password when logging in to monitoring server</p>
 <pre><code>- name: set htpasswd to nagiosadmin
   htpasswd:
@@ -296,7 +456,7 @@ fi
     mode: '0644'
     group: nagios
 </code></pre>
-<p>Servers configuration file should look like these</p>
+<p>Servers configuration file should look like these, but can be change based on what you would look like on a configuration file</p>
 <pre><code>define host {
         use                             linux-server
         host_name                       dev2
@@ -327,13 +487,6 @@ define service {
 define service {
         use                             generic-service
         host_name                       dev2
-        service_description             Storage Usage
-        check_command                   check_snmp_storage!85!90
-}
-
-define service {
-        use                             generic-service
-        host_name                       dev2
         service_description             HTTP Port Check
         check_command                   check_tcp!80
 }
@@ -341,8 +494,23 @@ define service {
 define service {
         use                             generic-service
         host_name                       dev2
-        service_description             Load Average - 5mins
-        check_command                   check_snmp_load_avg!0.70!0.90
+        service_description             Storage Usage
+        check_command                   check_snmp_disk!85!90
+}
+
+define service {
+        use                             generic-service
+        host_name                       dev2
+        service_description             Tomcat Service Check
+        check_command                   check_snmp_app!java
+        # Tomcat service cant be found on the process, only java which is kinda sadge
+}
+
+define service {
+        use                             generic-service
+        host_name                       dev2
+        service_description             Load Average
+        check_command                   check_snmp_load!80!90
 }
 </code></pre>
 <p>Start or restart nagios and httpd service</p>
@@ -355,6 +523,10 @@ define service {
     - nagios
     - httpd
 </code></pre>
+<p>Example monitoring per nodes are below</p>
+<p><a href="../assets/images/monitoring/monitoring-image-01.jpg"><img alt="" src="../assets/images/monitoring/monitoring-image-01.jpg" /></a>
+<a href="../assets/images/monitoring/monitoring-image-02.jpg"><img alt="" src="../assets/images/monitoring/monitoring-image-02.jpg" /></a>
+<a href="../assets/images/monitoring/monitoring-image-03.jpg"><img alt="" src="../assets/images/monitoring/monitoring-image-03.jpg" /></a></p>
 <h2 id="snmp-install-for-clients">SNMP install for clients</h2>
 <p>We need to open port 161/udp in firewalld </p>
 <pre><code>firewall-cmd --add-service=snmp --permanent
