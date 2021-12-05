@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="canonical" href="http://docs.sandbox.io/auth/">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Authority - Deve Linux Sandbox Project</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Authority";
+    var mkdocs_page_input_path = "auth.md";
+    var mkdocs_page_url = "/auth/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Deve Linux Sandbox Project</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../gateway/">DNS and DHCP</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../spacewalk/">Spacewalk</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../docs/">Documentation</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../freeipa/">FreeIPA</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../bot/">Automation</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../storage/">Storage</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../backup/">Backup</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../app/">Application</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../mail/">Mail</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../monitoring/">Monitoring</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../logs/">Logs</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Authority</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#dhcp-and-dns-entries">DHCP and DNS Entries</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#installation-and-setup">Installation and Setup</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#installation-and-directory-management">Installation and directory management</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#creation-of-private-keys">Creation of private keys</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#rootca-certificate-configuration">RootCA certificate configuration</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#intermediate-ca-csr-and-configuration">Intermediate CA CSR and configuration</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#server-csr-signing-and-configuration">Server CSR signing and configuration</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#configuration-to-other-servers">Configuration to other servers</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#transferring-of-files">Transferring of files</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#nginx-configuration">Nginx configuration</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#client-trust-configuration">Client Trust configuration</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#on-windowsgoogle-chrome">On Windows(Google Chrome)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#centos-clients">CentOS Clients</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Deve Linux Sandbox Project</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Authority</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="certificate-authority-server">Certificate Authority Server</h1>
+<p>The CA Server will act as a root CA and intermediate CA repository and will create, sign, and validate all my PKI(Public Key Infrastructure) in the environment. I am not doing any automation in this server.</p>
+<p>Also, I am creating this server since im done looking my internal homelab having a strikethrough on https whenever I browse the sites i am maintaining. I just want the feel that i am doing this outside on my local area network :P</p>
+<p><a href="../assets/images/auth/auth-image-01.jpg"><img alt="" src="../assets/images/auth/auth-image-01.jpg" /></a></p>
+<h2 id="dhcp-and-dns-entries">DHCP and DNS Entries</h2>
+<p>Forward lookup zone</p>
+<pre><code>@           IN  NS  authority.sandbox.io.
+@           IN  A   10.11.100.114
+authority   IN  A   10.11.100.114
+auth        IN  CNAME   authority
+</code></pre>
+<p>Reverse lookup zone</p>
+<pre><code>@           IN  NS  authority.sandbox.io.
+authority   IN  A   10.11.100.114
+114         IN  PTR authority.sandbox.io.
+</code></pre>
+<p>DHCP entry</p>
+<pre><code>host authority {
+    hardware ethernet 1E:13:68:37:74:28;
+    fixed-address 10.11.100.114;
+}
+</code></pre>
+<h2 id="installation-and-setup">Installation and Setup</h2>
+<h3 id="installation-and-directory-management">Installation and directory management</h3>
+<p>Install openssl and tree if is not installed, though tree is optional only if you want to get the idea on your infrastructure </p>
+<pre><code>[root@auth ~]# yum -y install openssl tree -y
+Loaded plugins: fastestmirror, rhnplugin
+This system is receiving updates from RHN Classic or Red Hat Satellite.
+Loading mirror speeds from cached hostfile
+Package 1:openssl-1.0.2k-22.el7_9.x86_64 already installed and latest version
+Package tree-1.6.0-10.el7.x86_64 already installed and latest version
+Nothing to do
+</code></pre>
+<p>We need to create root(root-ca), intermediate(sub-ca) and server directories, with certs, crl, csr, newcerts, private sub-directories. </p>
+<ul>
+<li>root-ca: this is our top level authority for issuing certificates, it will only issuing to intermediate(sub-ca)</li>
+<li>sub-ca: since if we only signed certificates via root-ca on real life, it is too much risk as they are much valuable. so to insulate the root CAs we created a sub-ca to signed server certificates on behalf of root-ca.</li>
+<li>server: directory for our whole environment of servers for certificate signing request</li>
+<li>certs: crt files that had been signed or self signed. </li>
+<li>private: private key files</li>
+<li>csr: certificate signing request, this is the location of csr files for sub-ca or root-ca signing.</li>
+<li>crl: certificate revocation list, location for all revoke certificates.</li>
+</ul>
+<p><em>Note: I am only emulating things and doing this in one server instead of a hierarchy of servers for root CA, intermediate CA, and so on, to build trust relationships.</em> </p>
+<pre><code>[root@auth ~]# mkdir -p ca/{root-ca,sub-ca,server}/{private,certs,newcerts,crl,csr}
+[root@auth ~]# tree ca/
+ca/
+├── root-ca
+│   ├── certs
+│   ├── crl
+│   ├── csr
+│   ├── newcerts
+│   └── private
+├── server
+│   ├── certs
+│   ├── crl
+│   ├── csr
+│   ├── newcerts
+│   └── private
+└── sub-ca
+    ├── certs
+    ├── crl
+    ├── csr
+    ├── newcerts
+    └── private
+</code></pre>
+<p>All private directories should be readable to user.</p>
+<pre><code>[root@auth ca]# chmod -v 700 {root-ca,sub-ca,server}/private
+mode of ‘root-ca/private’ changed from 0755 (rwxr-xr-x) to 0700 (rwx------)
+mode of ‘sub-ca/private’ changed from 0755 (rwxr-xr-x) to 0700 (rwx------)
+mode of ‘server/private’ changed from 0755 (rwxr-xr-x) to 0700 (rwx------)
+</code></pre>
+<p>Create an index file for root-ca and sub-ca directory</p>
+<pre><code>touch {root-ca,sub-ca}/index
+</code></pre>
+<p>the directories also needs a serial file, we can generate a random hexadecimal 16 bit output via <code>openssl rand -hex 16</code></p>
+<pre><code>openssl rand -hex 16 &gt; root-ca/serial
+openssl rand -hex 16 &gt; sub-ca/serial
+</code></pre>
+<h3 id="creation-of-private-keys">Creation of private keys</h3>
+<p>Now we want to generate the 3 private keys for root-ca, sub-ca, and server directory. The server private key is only <code>openssl genrsa -out server/private/server.key 2048</code> as i dont want to put a passphrase on the server and manually typing the pass phrase whenever i restart nginx or httpd service.</p>
+<pre><code>[root@auth ca]# openssl genrsa -aes256 -out root-ca/private/ca.key 4096
+Generating RSA private key, 4096 bit long modulus
+.............................++
+.....................................................................................++
+e is 65537 (0x10001)
+Enter pass phrase for root-ca/private/ca.key:
+Verifying - Enter pass phrase for root-ca/private/ca.key:
+
+[root@auth ca]# openssl genrsa -aes256 -out sub-ca/private/sub-ca.key 4096
+Generating RSA private key, 4096 bit long modulus
+...................................................................................................................................................................++
+.....................................................++
+e is 65537 (0x10001)
+Enter pass phrase for sub-ca/private/sub-ca.key:
+Verifying - Enter pass phrase for sub-ca/private/sub-ca.key:
+
+[root@auth ca]# openssl genrsa -out server/private/server.key 2048
+Generating RSA private key, 2048 bit long modulus
+........................................+++
+...............+++
+e is 65537 (0x10001)
+</code></pre>
+<p>Bit strength of root-ca and sub-ca private key is implemented to use 4096 for us to have a strongest protection we can, we only use 2048 on server as this may be too much overhead on servers if it using a lot of web traffic</p>
+<h3 id="rootca-certificate-configuration">RootCA certificate configuration</h3>
+<p>Now create a configuration file for root-ca, this will be used for signing the self signed certificate of rootca</p>
+<pre><code>#root-ca/root-ca.conf
+[ca]
+default_ca    = CA_default
+[CA_default]
+dir     = /root/ca/root-ca
+certs     =  $dir/certs
+crl_dir    = $dir/crl
+new_certs_dir   = $dir/newcerts
+database   = $dir/index
+serial    = $dir/serial
+RANDFILE   = $dir/private/.rand
+private_key   = $dir/private/ca.key
+certificate   = $dir/certs/ca.crt
+crlnumber   = $dir/crlnumber
+crl    =  $dir/crl/ca.crl
+crl_extensions   = crl_ext
+default_crl_days    = 30
+default_md   = sha256
+name_opt   = ca_default
+cert_opt   = ca_default
+default_days   = 365
+preserve   = no
+policy    = policy_strict
+[ policy_strict ]
+countryName   = supplied
+stateOrProvinceName  =  supplied
+organizationName  = match
+organizationalUnitName  =  optional
+commonName   =  supplied
+emailAddress   =  optional
+[ policy_loose ]
+countryName   = optional
+stateOrProvinceName  = optional
+localityName   = optional
+organizationName  = optional
+organizationalUnitName   = optional
+commonName   = supplied
+emailAddress   = optional
+[ req ]
+default_bits   = 2048
+distinguished_name  = req_distinguished_name
+string_mask   = utf8only
+default_md   =  sha256
+x509_extensions   = v3_ca
+[ req_distinguished_name ]
+countryName                     = Country Name (2 letter code)
+stateOrProvinceName             = State or Province Name
+localityName                    = Locality Name
+0.organizationName              = Organization Name
+organizationalUnitName          = Organizational Unit Name
+commonName                      = Common Name
+emailAddress                    = Email Address
+countryName_default  = PH
+stateOrProvinceName_default = Cavite
+0.organizationName_default = Sandbox
+[ v3_ca ]
+subjectKeyIdentifier  = hash
+authorityKeyIdentifier  = keyid:always,issuer
+basicConstraints  = critical, CA:true
+keyUsage   =  critical, digitalSignature, cRLSign, keyCertSign
+[ v3_intermediate_ca ]
+subjectKeyIdentifier  = hash
+authorityKeyIdentifier  = keyid:always,issuer
+basicConstraints  = critical, CA:true, pathlen:0
+keyUsage   = critical, digitalSignature, cRLSign, keyCertSign
+[ server_cert ]
+basicConstraints  = CA:FALSE
+nsCertType   = server
+nsComment   =  "OpenSSL Generated Server Certificate"
+subjectKeyIdentifier  = hash
+authorityKeyIdentifier  = keyid,issuer:always
+keyUsage   =  critical, digitalSignature, keyEncipherment
+extendedKeyUsage  = serverAuth
+</code></pre>
+<p>Create the root certificate file by using <code>openssl req -config root-ca.conf -key private/ca.key -new -x509 -days 3650 -sha256 -extensions v3_ca -out certs/ca.crt</code></p>
+<ul>
+<li>-config: use this config instead of openssl.cnf file located in /etc/pki/tls/</li>
+<li>-key: location of private key</li>
+<li>-days: how long the public cert will last before expiring</li>
+<li>-x509: create the certificate in x509 format</li>
+<li>-sha256: message digest format</li>
+<li>-extensions: use the v3_ca function located on root-ca.conf </li>
+<li>-out: output location where the certificate will be created</li>
+</ul>
+<p>The command will output similar below:</p>
+<pre><code>[root@auth ca]# cd root-ca/
+[root@auth root-ca]# openssl req -config root-ca.conf -key private/ca.key -new -x509 -days 3650 -sha256 -extensions v3_ca -out certs/ca.crt
+Enter pass phrase for private/ca.key:
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+Country Name (2 letter code) [PH]:PH
+State or Province Name [Cavite]:Cavite
+Locality Name []:Bacoor
+Organization Name [Sandbox]:
+Organizational Unit Name []:IT
+Common Name []:ROOTCA
+Email Address []:
+[root@auth root-ca]#
+</code></pre>
+<p>You can verify your certificate file using <code>openssl x509 -in certs/ca.crt -noout -text</code></p>
+<pre><code>[root@auth root-ca]# openssl x509 -in certs/ca.crt -noout -text
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            f3:ac:8e:98:a4:5c:38:bc
+    Signature Algorithm: sha256WithRSAEncryption
+        Issuer: C=PH, ST=Cavite, L=Bacoor, O=Sandbox, OU=IT, CN=ROOTCA
+        Validity
+            Not Before: Dec  5 16:16:02 2021 GMT
+            Not After : Dec  3 16:16:02 2031 GMT
+        Subject: C=PH, ST=Cavite, L=Bacoor, O=Sandbox, OU=IT, CN=ROOTCA
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (4096 bit)
+                Modulus:
+</code></pre>
+<h3 id="intermediate-ca-csr-and-configuration">Intermediate CA CSR and configuration</h3>
+<p>We need also to create a separate ca configuration file for sub-ca directory</p>
+<pre><code>#sub-ca.conf
+[ca]
+default_ca    = CA_default
+[CA_default]
+# Change this to your sub-ca directory
+dir     = /root/ca/sub-ca
+certs     =  $dir/certs
+crl_dir    = $dir/crl
+new_certs_dir   = $dir/newcerts
+database   = $dir/index
+serial    = $dir/serial
+RANDFILE   = $dir/private/.rand
+private_key   = $dir/private/sub-ca.key
+certificate   = $dir/certs/sub-ca.crt
+crlnumber   = $dir/crlnumber
+crl    =  $dir/crl/ca.crl
+crl_extensions   = crl_ext
+default_crl_days    = 30
+default_md   = sha256
+name_opt   = ca_default
+cert_opt   = ca_default
+default_days   = 365
+preserve   = no
+policy    = policy_loose
+[ policy_strict ]
+countryName   = supplied
+stateOrProvinceName  =  supplied
+organizationName  = match
+organizationalUnitName  =  optional
+commonName   =  supplied
+emailAddress   =  optional
+[ policy_loose ]
+countryName   = optional
+stateOrProvinceName  = optional
+localityName   = optional
+organizationName  = optional
+organizationalUnitName   = optional
+commonName   = supplied
+emailAddress   = optional
+[ req ]
+default_bits   = 2048
+distinguished_name  = req_distinguished_name
+string_mask   = utf8only
+default_md   =  sha256
+x509_extensions   = v3_ca
+[ req_distinguished_name ]
+countryName                     = Country Name (2 letter code)
+stateOrProvinceName             = State or Province Name
+localityName                    = Locality Name
+0.organizationName              = Organization Name
+organizationalUnitName          = Organizational Unit Name
+commonName                      = Common Name
+emailAddress                    = Email Address
+countryName_default  = PH
+stateOrProvinceName_default = Cavite
+0.organizationName_default = Sandbox
+[ v3_ca ]
+subjectKeyIdentifier  = hash
+authorityKeyIdentifier  = keyid:always,issuer
+basicConstraints  = critical, CA:true
+keyUsage   =  critical, digitalSignature, cRLSign, keyCertSign
+[ v3_intermediate_ca ]
+subjectKeyIdentifier  = hash
+authorityKeyIdentifier  = keyid:always,issuer
+basicConstraints  = critical, CA:true, pathlen:0
+keyUsage   = critical, digitalSignature, cRLSign, keyCertSign
+[ server_cert ]
+basicConstraints  = CA:FALSE
+nsCertType   = server
+nsComment   =  "OpenSSL Generated Server Certificate"
+subjectKeyIdentifier  = hash
+authorityKeyIdentifier  = keyid,issuer:always
+keyUsage   =  critical, digitalSignature, keyEncipherment
+extendedKeyUsage  = serverAuth
+# This is important to change for chrome browser not to tag it as insecure
+subjectAltName = @alt_names
+[ alt_names ]
+DNS.1 = docs.sandbox.io
+DNS.2 = devdocs.sandbox.io
+</code></pre>
+<p>We need to create a certificate signing request on the sub-ca directory for the root ca to sign it and create a certificate file. You can use <code>openssl req -config sub-ca.conf -new -key private/sub-ca.key -sha256 -out csr/sub-ca.csr</code></p>
+<pre><code>[root@auth sub-ca]# openssl req -config sub-ca.conf -new -key private/sub-ca.key -sha256 -out csr/sub-ca.csr
+Enter pass phrase for private/sub-ca.key:
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [PH]:PH
+State or Province Name [Cavite]:
+Locality Name []:
+Organization Name [Sandbox]:
+Organizational Unit Name []:IT
+Common Name []:authority.sandbox.io
+Email Address []:root@sandbox.io
+</code></pre>
+<p>Move to the root-ca directory and create the sub-ca certificate file using its certificate signing request, use <code>openssl ca -config root-ca.conf -extensions v3_intermediate_ca -days 1825 -notext -in ../sub-ca/csr/sub-ca.csr -out ../sub-ca/certs/sub-ca.crt</code></p>
+<pre><code>[root@auth sub-ca]# cd ../root-ca/
+[root@auth root-ca]# openssl ca -config root-ca.conf -extensions v3_intermediate_ca -days 1825 -notext -in ../sub-ca/csr/sub-ca.csr -out ../sub-ca/certs/sub-ca.crt
+Using configuration from root-ca.conf
+Enter pass phrase for /root/ca/root-ca/private/ca.key:
+Check that the request matches the signature
+Signature ok
+Certificate Details:
+        Serial Number:
+            d1:a1:ba:cc:a3:80:57:1b:55:8f:ff:e2:61:59:eb:15
+        Validity
+            Not Before: Dec  5 16:56:56 2021 GMT
+            Not After : Dec  4 16:56:56 2026 GMT
+        Subject:
+            countryName               = PH
+            stateOrProvinceName       = Cavite
+            organizationName          = Sandbox
+            organizationalUnitName    = IT
+            commonName                = authority.sandbox.io
+            emailAddress              = root@sandbox.io
+        X509v3 extensions:
+            X509v3 Subject Key Identifier:
+                D4:02:04:89:96:B7:51:04:99:0C:62:42:1D:DB:75:55:AB:E8:73:78
+            X509v3 Authority Key Identifier:
+                keyid:E1:A0:12:4D:CF:D9:24:BD:B8:F0:D7:BC:84:FE:A4:0D:11:28:42:58
+
+            X509v3 Basic Constraints: critical
+                CA:TRUE, pathlen:0
+            X509v3 Key Usage: critical
+                Digital Signature, Certificate Sign, CRL Sign
+Certificate is to be certified until Dec  4 16:56:56 2026 GMT (1825 days)
+Sign the certificate? [y/n]:y
+
+
+1 out of 1 certificate requests certified, commit? [y/n]y
+Write out database with 1 new entries
+Data Base Updated
+</code></pre>
+<p>Once it is done, it will also create a pem file which is the same with the cert file we created for sub-ca, index file is also updated</p>
+<pre><code>[root@auth ca]# cat root-ca/index
+V       261204165656Z           D1A1BACCA380571B558FFFE26159EB15        unknown /C=PH/ST=Cavite/O=Sandbox/OU=IT/CN=authority.sandbox.io/emailAddress=root@sandbox.io
+[root@auth ca]# tree
+.
+├── root-ca
+│   ├── certs
+│   │   └── ca.crt
+│   ├── crl
+│   ├── csr
+│   ├── index
+│   ├── index.attr
+│   ├── index.old
+│   ├── newcerts
+│   │   └── D1A1BACCA380571B558FFFE26159EB15.pem # this file
+│   ├── private
+│   │   └── ca.key
+│   ├── root-ca.conf
+│   ├── serial
+│   └── serial.old
+└── sub-ca
+    ├── certs
+    │   └── sub-ca.crt # is the same with this file
+    ├── crl
+    ├── csr
+    │   └── sub-ca.csr
+    ├── index
+    ├── newcerts
+    ├── private
+    │   └── sub-ca.key
+    ├── serial
+    └── sub-ca.conf
+</code></pre>
+<h3 id="server-csr-signing-and-configuration">Server CSR signing and configuration</h3>
+<p>Now create a certificate signing request for each servers on your environment that needs SSL, on my end, i will use it for my docs.sandbox.io website: <code>openssl req -key private/server.key -new -sha256 -out csr/docs.csr</code> </p>
+<pre><code>[root@auth server]# openssl req -key private/server.key -new -sha256 -out csr/docs.csr
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [XX]:PH
+State or Province Name (full name) []:Cavite
+Locality Name (eg, city) [Default City]:Dasma
+Organization Name (eg, company) [Default Company Ltd]:Playground
+Organizational Unit Name (eg, section) []:Finance
+Common Name (eg, your name or your servers hostname) []:docs.sandbox.io
+Email Address []:deve@sandbox.io
+
+Please enter the following "extra" attributes
+# Note: You can enter "extra" as password or you can also leave it as blank
+to be sent with your certificate request
+A challenge password []:
+An optional company name []:
+</code></pre>
+<p>This can be done on the server itself but to make it centralize I did it on this server.</p>
+<p>Sign the certificate using the sub-ca certificate, use: <code>openssl ca -config sub-ca.conf -extensions server_cert -days 365 -notext -in ../server/csr/docs1.csr -out ../server/certs/docs1.crt</code></p>
+<pre><code>[root@auth sub-ca]# openssl ca -config sub-ca.conf -extensions server_cert -days 365 -notext -in ../server/csr/docs.csr -out .
+./server/certs/docs.crt
+Using configuration from sub-ca.conf
+Enter pass phrase for /root/ca/sub-ca/private/sub-ca.key:
+Check that the request matches the signature
+Signature ok
+Certificate Details:
+        Serial Number:
+            8f:1f:da:80:c0:1e:c6:21:ca:32:1b:0b:11:c7:0b:e7
+        Validity
+            Not Before: Dec  5 17:26:36 2021 GMT
+            Not After : Dec  5 17:26:36 2022 GMT
+        Subject:
+            countryName               = PH
+            stateOrProvinceName       = Cavite
+            localityName              = Dasma
+            organizationName          = Playground
+            organizationalUnitName    = Finance
+            commonName                = docs.sandbox.io
+            emailAddress              = deve@sandbox.io
+        X509v3 extensions:
+            X509v3 Basic Constraints:
+                CA:FALSE
+            Netscape Cert Type:
+                SSL Server
+            Netscape Comment:
+                OpenSSL Generated Server Certificate
+            X509v3 Subject Key Identifier:
+                E3:A4:49:8B:37:7D:11:BA:2C:7B:B8:3D:70:27:F5:C9:F7:2D:8D:58
+            X509v3 Authority Key Identifier:
+                keyid:D4:02:04:89:96:B7:51:04:99:0C:62:42:1D:DB:75:55:AB:E8:73:78
+                DirName:/C=PH/ST=Cavite/L=Bacoor/O=Sandbox/OU=IT/CN=ROOTCA
+                serial:D1:A1:BA:CC:A3:80:57:1B:55:8F:FF:E2:61:59:EB:15
+
+            X509v3 Key Usage: critical
+                Digital Signature, Key Encipherment
+            X509v3 Extended Key Usage:
+                TLS Web Server Authentication
+            X509v3 Subject Alternative Name:
+                DNS:docs.sandbox.io, DNS:devdocs.sandbox.io
+Certificate is to be certified until Dec  5 17:26:36 2022 GMT (365 days)
+Sign the certificate? [y/n]:y
+
+
+1 out of 1 certificate requests certified, commit? [y/n]y
+Write out database with 1 new entries
+Data Base Updated
+</code></pre>
+<p>You can verify the certificate file using: <code>openssl x509 -in certs/docs.crt -noout -text</code></p>
+<pre><code>[root@auth sub-ca]# cd ../server/
+[root@auth server]# openssl x509 -in certs/docs.crt -noout -text
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            8f:1f:da:80:c0:1e:c6:21:ca:32:1b:0b:11:c7:0b:e7
+    Signature Algorithm: sha256WithRSAEncryption
+        Issuer: C=PH, ST=Cavite, O=Sandbox, OU=IT, CN=authority.sandbox.io/emailAddress=root@sandbox.io
+        Validity
+            Not Before: Dec  5 17:26:36 2021 GMT
+            Not After : Dec  5 17:26:36 2022 GMT
+        Subject: C=PH, ST=Cavite, L=Dasma, O=Playground, OU=Finance, CN=docs.sandbox.io/emailAddress=deve@sandbox.io
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+</code></pre>
+<h2 id="configuration-to-other-servers">Configuration to other servers</h2>
+<h3 id="transferring-of-files">Transferring of files</h3>
+<p>Transfer the certificate files to docs.sandbox.io, since i am using nginx i will concatenate docs.crt and sub-ca.crt together since this is needed for the client to verify its intermediate certificate authority</p>
+<pre><code>[root@auth certs]# cat certs/docs.crt ../../sub-ca/certs/sub-ca.crt &gt; certs/docs-chained.crt
+[root@auth server]# scp certs/docs-chained.crt docs:/etc/pki/tls/certs/docs.crt
+root@docs password:
+docs.crt                                                                                    100% 2143     7.7MB/s   00:00
+[root@auth server]# scp private/server.key docs:/etc/pki/tls/private/docs.key
+root@docs password:
+server.key                                                                                  100% 1679     5.8MB/s   00:00
+</code></pre>
+<h3 id="nginx-configuration">Nginx configuration</h3>
+<p>On docs server configure it to use HTTPS on /etc/nginx/nginx.conf</p>
+<pre><code>server {
+    listen       443 ssl http2;
+    listen       [::]:443 ssl http2;
+    server_name  docs.sandbox.io;
+    root         /opt/sites/docs-site;
+
+    ssl_certificate "/etc/pki/tls/certs/docs.crt";
+    ssl_certificate_key "/etc/pki/tls/private/docs.key";
+    ssl_session_cache shared:SSL:1m;
+    ssl_session_timeout  10m;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+
+    # Load configuration files for the default server block.
+    include /etc/nginx/default.d/*.conf;
+
+    error_page 404 /404.html;
+        location = /40x.html {
+    }
+
+    error_page 500 502 503 504 /50x.html;
+        location = /50x.html {
+    }
+}
+</code></pre>
+<p>Restart nginx service</p>
+<pre><code>systemctl restart nginx
+</code></pre>
+<h2 id="client-trust-configuration">Client Trust configuration</h2>
+<h3 id="on-windowsgoogle-chrome">On Windows(Google Chrome)</h3>
+<p>Since that our root certificate file is not trusted by the clients that will access the website(unlike digicert or entrust), we need to transfer the certificate file on each clients</p>
+<p>Navigate to Privacy and Security in chrome://settings, and click security to open the tab. browse to Advance and click "Manage Certificates", Certificate tab will appear. Click Trusted Root Certificate Authorities.</p>
+<p><a href="../assets/images/auth/auth-image-02.jpg"><img alt="" src="../assets/images/auth/auth-image-02.jpg" /></a></p>
+<p>Import the certificate and click yes to the Security Warning notification</p>
+<p><a href="../assets/images/auth/auth-image-03.jpg"><img alt="" src="../assets/images/auth/auth-image-03.jpg" /></a></p>
+<p>You can now have a verified connection on your website, this can be done on firefox as well</p>
+<p><a href="../assets/images/auth/auth-image-04.jpg"><img alt="" src="../assets/images/auth/auth-image-04.jpg" /></a></p>
+<p><a href="../assets/images/auth/auth-image-05.jpg"><img alt="" src="../assets/images/auth/auth-image-05.jpg" /></a></p>
+<h3 id="centos-clients">CentOS Clients</h3>
+<p>When you access the website on Linux server this will not be trusted as well</p>
+<pre><code>[root@client ~]# curl https://docs.sandbox.io
+curl: (60) Peers Certificate issuer is not recognized.
+More details here: http://curl.haxx.se/docs/sslcerts.html
+
+curl performs SSL certificate verification by default, using a "bundle"
+ of Certificate Authority (CA) public keys (CA certs). If the default
+ bundle file isnt adequate, you can specify an alternate file
+ using the --cacert option.
+If this HTTPS server uses a certificate signed by a CA represented in
+ the bundle, the certificate verification probably failed due to a
+ problem with the certificate (it might be expired, or the name might
+ not match the domain name in the URL).
+If youd like to turn off curls verification of the certificate, use
+ the -k (or --insecure) option.
+</code></pre>
+<p>Transfer the root CA certificate file to client machine</p>
+<pre><code>[root@auth ca]# scp root-ca/certs/ca.crt client:~/sandbox-root-ca.crt
+root@docs password:
+ca.crt                                                                                      100% 2017     8.7MB/s   00:00
+</code></pre>
+<p>Now access the client machine and move the certificate file to /etc/pki/ca-trust/source/anchors/ then perform the <code>update-ca-trust</code> command</p>
+<pre><code>[root@client ~]# ls
+initial-puppet-log.txt  sandbox-root-ca.crt
+[root@client ~]# cp sandbox-root-ca.crt /etc/pki/ca-trust/source/anchors/
+[root@client ~]# update-ca-trust
+[root@client ~]# curl https://docs.sandbox.io | tail
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  9377  100  9377    0     0   118k      0 --:--:-- --:--:-- --:--:--  118k
+        };
+    &lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+&lt;!--
+MkDocs version : 1.2.3
+Build Date UTC : 2021-12-05 18:08:53.168393+00:00
+--&gt;
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../logs/" class="btn btn-neutral" title="Logs"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../logs/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
