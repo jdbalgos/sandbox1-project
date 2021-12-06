@@ -53,7 +53,9 @@
                 <ul class="current">
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">DNS and DHCP</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a>
+    <li class="toctree-l2"><a class="reference internal" href="#installation-and-setup">Installation and Setup</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#proxmox-setup">Proxmox Setup</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#dhcp-server-setup">DHCP server setup</a>
     </li>
@@ -148,15 +150,45 @@
             <div class="section">
               
                 <h1 id="dns-and-dhcp-server">DNS and DHCP Server</h1>
-<p>This server was previously created long before and cannot find my own documentation on this when i created it, so most of the instructions are from what i remember.</p>
-<h2 id="installation">Installation</h2>
-<p>Ensure the machine has a second NIC, in this example the second NIC will be named as eth1 </p>
-<p>Install the following packages:</p>
-<pre><code>iptables(remove firewalld if installed on the machine)
-bind, bind-utils, bind-libs
-dhcp
+<h2 id="installation-and-setup">Installation and Setup</h2>
+<h2 id="proxmox-setup">Proxmox Setup</h2>
+<p>Create a linux bridge on the proxmox server to isolate the network to other side</p>
+<p><a href="../assets/images/dnsdhcp/dnsdhcp-image-01.jpg"><img alt="" src="../assets/images/dnsdhcp/dnsdhcp-image-01.jpg" /></a></p>
+<p>Perform a reboot on the server, once it is done we can create a KVM or LXC. then after creating the virtual machine we need to other NIC on it and link it to the created linux bridge.</p>
+<p><a href="../assets/images/dnsdhcp/dnsdhcp-image-02.jpg"><img alt="" src="../assets/images/dnsdhcp/dnsdhcp-image-02.jpg" /></a></p>
+<p>Start the VM, ensure the KVM/LXC have a second NIC, on my end it is eth1</p>
+<pre><code>[root@dns-dhcp ~]# ip a
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: eth0@if11: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether e2:67:0e:2f:3a:7d brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 192.168.254.107/24 brd 192.168.254.255 scope global dynamic eth0
+       valid_lft 250156sec preferred_lft 250156sec
+    inet6 fe80::e067:eff:fe2f:3a7d/64 scope link 
+       valid_lft forever preferred_lft forever
+3: eth1@if15: &lt;BROADCAST,MULTICAST&gt; mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether 0a:bf:e2:77:5c:5f brd ff:ff:ff:ff:ff:ff link-netnsid 0
 </code></pre>
+<p>Install necessary packages:</p>
 <p><code>yum install -y iptables bind bind-utils bind-libs dhcp</code></p>
+<pre><code>[root@dns-dhcp ~]# yum install -y iptables bind bind-utils bind-libs dhcp
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+ * base: mirror.hostlink.com.hk
+ * extras: mirror.hostlink.com.hk
+ * updates: mirror.hostlink.com.hk
+Package iptables-1.4.21-35.el7.x86_64 already installed and latest version
+Package 32:bind-9.11.4-26.P2.el7_9.8.x86_64 already installed and latest version
+Package 32:bind-utils-9.11.4-26.P2.el7_9.8.x86_64 already installed and latest version
+Package 32:bind-libs-9.11.4-26.P2.el7_9.8.x86_64 already installed and latest version
+Package 12:dhcp-4.2.5-83.el7.centos.1.x86_64 already installed and latest version
+Nothing to do
+</code></pre>
+<p>Disable and stop firewalld as we will use iptables as the firewall</p>
 <p><code>systemctl stop firewalld &amp;&amp; systemctl disable firewalld</code></p>
 <p>eth1 configuration must be set below:</p>
 <pre><code>DEVICE=eth1
@@ -167,6 +199,16 @@ ONBOOT=yes
 NM_CONTROLLED=no
 TYPE=Ethernet
 DNS1="127.0.0.1"
+</code></pre>
+<p>After that you need to restart network service or use ifdown/up command</p>
+<pre><code>[root@dns-dhcp ~]# systemctl restart network
+[root@dns-dhcp ~]# ip a
+3: eth1@if15: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 0a:bf:e2:77:5c:5f brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 10.11.101.1/24 brd 10.11.101.255 scope global eth1
+       valid_lft forever preferred_lft forever
+    inet6 fe80::8bf:e2ff:fe77:5c5f/64 scope link
+       valid_lft forever preferred_lft forever
 </code></pre>
 <h2 id="dhcp-server-setup">DHCP server setup</h2>
 <p>Edit dhcpd.conf to use spacewalk ip address as next-server for pxe</p>
@@ -193,8 +235,13 @@ subnet 10.11.100.0 netmask 255.255.255.0{
 }
 </code></pre>
 <p>Enable and start dhcpd server</p>
-<p><code>systemctl enable dhcpd</code></p>
-<p><code>systemctl start dhcpd</code></p>
+<p><code>systemctl enable --now dhcpd</code></p>
+<p>You should be able to verify that dhcpd is working via journalctl</p>
+<pre><code>Dec 06 11:52:47 dns-dhcp dhcpd[1681]: DHCPDISCOVER from de:a9:15:7b:de:e1 via eth1
+Dec 06 11:52:48 dns-dhcp dhcpd[1681]: DHCPOFFER on 10.11.100.10 to de:a9:15:7b:de:e1 (client-test) via eth1
+Dec 06 11:52:48 dns-dhcp dhcpd[1681]: DHCPREQUEST for 10.11.100.10 (10.11.100.1) from de:a9:15:7b:de:e1 (client-test) via eth1
+Dec 06 11:52:48 dns-dhcp dhcpd[1681]: DHCPACK on 10.11.100.10 to de:a9:15:7b:de:e1 (client-test) via eth1
+</code></pre>
 <h2 id="dns-server-setup">DNS Server setup</h2>
 <h3 id="namedconf-configuration">named.conf configuration</h3>
 <p>Edit /etc/named.conf file, this file is the main configuration file of the bind package manager</p>
@@ -238,8 +285,11 @@ zone "100.11.10.in-addr.arpa" IN {
 </code></pre>
 <h3 id="forward-and-reverse-lookup-zone">Forward and reverse lookup zone</h3>
 <p>The file sandbox.forward and sandbox.reverse that was stated in named.conf file needs to be created in /var/named</p>
-<p><code>touch /var/named/sandbox.forward</code></p>
-<p><code>touch /var/named/sandbox.reverse</code></p>
+<pre><code>touch /var/named/sandbox.{forward,reverse}
+[root@dhcp-dns-copy ~]# ls -ld /var/named/sandbox.{forward,reverse}
+-rw-r--r-- 1 root root 0 Dec  6 12:38 /var/named/sandbox.forward
+-rw-r--r-- 1 root root 0 Dec  6 12:38 /var/named/sandbox.reverse
+</code></pre>
 <p>Both of those file will have the same heading template like below in order to work</p>
 <pre><code>$TTL 86400
 @       IN      SOA     dnsdhcp.sandbox.io.     root.sandbox.io (
@@ -263,8 +313,18 @@ dnsdhcp     IN  A   10.11.100.1
 1           IN  PTR dnsdhcp.sandbox.io.
 </code></pre>
 <p>Start and enable bind service</p>
-<p><code>systemctl enable named</code></p>
-<p><code>systemctl start named</code></p>
+<p><code>systemctl enable --now named</code></p>
+<p>You should have response on the DNS server when doing nslookup</p>
+<pre><code>[root@dns-dhcp ~]# nslookup dnsdhcp
+Server:         127.0.0.1
+Address:        127.0.0.1#53
+
+Name:   dnsdhcp.sandbox.io
+Address: 10.11.100.1
+
+[root@dns-dhcp ~]# nslookup 10.11.100.1
+1.100.11.10.in-addr.arpa        name = dnsdhcp.sandbox.io.
+</code></pre>
 <h2 id="firewall-plus-other-settings">Firewall plus other settings</h2>
 <p>Iptables firewall configuration must be configured same as below</p>
 <pre><code>*filter
