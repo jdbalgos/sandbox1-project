@@ -174,13 +174,14 @@
     link/ether 0a:bf:e2:77:5c:5f brd ff:ff:ff:ff:ff:ff link-netnsid 0
 </code></pre>
 <p>Install necessary packages:</p>
-<p><code>yum install -y iptables bind bind-utils bind-libs dhcp</code></p>
-<pre><code>[root@dns-dhcp ~]# yum install -y iptables bind bind-utils bind-libs dhcp
+<p><code>yum install -y iptables iptables-services bind bind-utils bind-libs dhcp</code></p>
+<pre><code>[root@dns-dhcp ~]# yum install -y iptables iptables-services bind bind-utils bind-libs dhcp
 Loaded plugins: fastestmirror
 Loading mirror speeds from cached hostfile
  * base: mirror.hostlink.com.hk
  * extras: mirror.hostlink.com.hk
  * updates: mirror.hostlink.com.hk
+Package iptables-services-1.4.21-35.el7.x86_64 already installed and latest version
 Package iptables-1.4.21-35.el7.x86_64 already installed and latest version
 Package 32:bind-9.11.4-26.P2.el7_9.8.x86_64 already installed and latest version
 Package 32:bind-utils-9.11.4-26.P2.el7_9.8.x86_64 already installed and latest version
@@ -326,7 +327,7 @@ Address: 10.11.100.1
 1.100.11.10.in-addr.arpa        name = dnsdhcp.sandbox.io.
 </code></pre>
 <h2 id="firewall-plus-other-settings">Firewall plus other settings</h2>
-<p>Iptables firewall configuration must be configured same as below</p>
+<p>Iptables firewall configuration must be configured same as below, alternatively you can add this to /etc/sysconfig/iptables then restart iptables: <code>systemctl restart iptables</code></p>
 <pre><code>*filter
 :INPUT ACCEPT [0:0]
 :FORWARD ACCEPT [0:0]
@@ -337,7 +338,6 @@ Address: 10.11.100.1
 -A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT
 -A INPUT -i eth1 -s 10.11.100.0/24 -p tcp --dport 53 -j ACCEPT
 -A INPUT -i eth1 -s 10.11.100.0/24 -p udp --dport 53 -j ACCEPT
--A INPUT -i eth1 -s 10.11.100.0/24 -p tcp --dport 80 -j ACCEPT
 -A INPUT -j REJECT --reject-with icmp-host-prohibited
 -A FORWARD -i eth0 -o eth1 -m state --state RELATED,ESTABLISHED -j ACCEPT
 -A FORWARD -i eth1 -o eth0 -j ACCEPT
@@ -351,8 +351,52 @@ COMMIT
 -A POSTROUTING -o eth0 -j MASQUERADE
 COMMIT
 </code></pre>
-<p>execute this on the command line to add ip forwarding in sysctl.conf</p>
+<p>If you want to do it on command line, just insert <code>iptables</code> command on every rule. Note that when dealing the Postrouting rule, we need to insert <code>-t nat</code> too</p>
+<pre><code>iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+</code></pre>
+<p>You can check the rules via <code>iptables -L</code>, and <code>iptables -t nat -nvL</code> for the postrouting rule. save the rule when done</p>
+<pre><code>[root@dns-dhcp ~]# iptables -L
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination
+ACCEPT     all  --  anywhere             anywhere             state RELATED,ESTABLISHED
+ACCEPT     icmp --  anywhere             anywhere
+ACCEPT     all  --  anywhere             anywhere
+ACCEPT     tcp  --  anywhere             anywhere             state NEW tcp dpt:ssh
+ACCEPT     tcp  --  10.11.100.0/24       anywhere             tcp dpt:domain
+ACCEPT     udp  --  10.11.100.0/24       anywhere             udp dpt:domain
+REJECT     all  --  anywhere             anywhere             reject-with icmp-host-prohibited
+
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination
+ACCEPT     all  --  anywhere             anywhere             state RELATED,ESTABLISHED
+ACCEPT     all  --  anywhere             anywhere
+REJECT     all  --  anywhere             anywhere             reject-with icmp-host-prohibited
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination
+
+[root@dns-dhcp ~]# iptables -t nat -nvL
+
+Chain PREROUTING (policy ACCEPT 87 packets, 9331 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+
+Chain INPUT (policy ACCEPT 4 packets, 260 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+
+Chain OUTPUT (policy ACCEPT 12 packets, 3420 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+
+Chain POSTROUTING (policy ACCEPT 12 packets, 3420 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+   17  1428 MASQUERADE  all  --  *      eth0    0.0.0.0/0            0.0.0.0/0
+
+[root@dns-dhcp ~]# iptables-save &gt; /etc/sysconfig/iptables # or service iptables save
+[root@dns-dhcp ~]# systemctl restart iptables
+</code></pre>
+<p>Execute this on the command line to add ip forwarding in sysctl.conf</p>
 <p><code>echo net.ipv4.ip_forward = 1 &gt;&gt; /etc/sysctl.conf</code> </p>
+<p>Reboot the server</p>
               
             </div>
           </div>
