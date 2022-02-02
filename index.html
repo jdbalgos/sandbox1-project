@@ -61,10 +61,6 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#secondary-servers">Secondary servers</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#additional-deployments">Additional Deployments</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#decommisioned-servers">Decommisioned servers</a>
-    </li>
         </ul>
     </li>
     </ul>
@@ -155,7 +151,7 @@
 <h2 id="about-this-site">About this site</h2>
 <p>I am creating a documentation for my created environment, all based on CentOS 7 Linux Servers.</p>
 <p>The documentation on setup of secondary servers are a little bit weird, as this was planned via configuration management. the plan was the secondary servers are "on the go servers" meaning that they can be deployable again if destroyed "accidentally".</p>
-<p>As i am learning on linux server administration/devops engineering, I hope that this is what they do on enterprise environments so things would be more easier for me to adopt once i got a job regarding to this. Though the point of this project was just to learn things :P</p>
+<p>This project is complete for me. I want to restart another project with another technologies.</p>
 <h3 id="hypervisor-details">Hypervisor Details</h3>
 <p>The hypervisor that i am using is running on proxmox 6.3, specifications below:</p>
 <ul>
@@ -265,72 +261,6 @@
 </tr>
 </tbody>
 </table>
-<h3 id="additional-deployments">Additional Deployments</h3>
-<p>This is for additional servers i want to add on the environment on the future. </p>
-<table>
-<thead>
-<tr>
-<th>Hostname</th>
-<th>IP</th>
-<th>Details</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>docker.sandbox.io</td>
-<td>TBD</td>
-<td>Container Server, will move the secondary servers here on the future</td>
-</tr>
-<tr>
-<td>jenkins.sandbox.io</td>
-<td>TBD</td>
-<td>For CI/CD? idk, i want to learn this too lol</td>
-</tr>
-<tr>
-<td>gitlab.sandbox.io</td>
-<td>TBD</td>
-<td>internal git server, want to learn gitlab pipelines too lol</td>
-</tr>
-<tr>
-<td>proxy.sandbox.io</td>
-<td>TBD</td>
-<td>Squid server for proxing all secondary web servers.</td>
-</tr>
-<tr>
-<td>awx.sandbox.io</td>
-<td>TBD</td>
-<td>ansible tower server</td>
-</tr>
-</tbody>
-</table>
-<h3 id="decommisioned-servers">Decommisioned servers</h3>
-<p>As the project scope is getting wide, and much of the primary servers are not totally used. i will decommision some of the servers to save some space. </p>
-<table>
-<thead>
-<tr>
-<th>Hostname</th>
-<th>Status</th>
-<th>Details</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>bot.sandbox.io</td>
-<td>TODO</td>
-<td>Will be replaced by awx.sandbox.io</td>
-</tr>
-<tr>
-<td>storage.sandbox.io</td>
-<td>TODO</td>
-<td>not final, not totally used at the moment</td>
-</tr>
-<tr>
-<td>backup.sandbox.io</td>
-<td>TODO</td>
-<td>not final, not totally used at the moment</td>
-</tr>
-</tbody>
-</table>
               
             </div>
           </div>
@@ -385,5 +315,5 @@
 
 <!--
 MkDocs version : 1.2.3
-Build Date UTC : 2021-12-06 18:18:29.226889+00:00
+Build Date UTC : 2022-02-02 11:32:06.476081+00:00
 -->
